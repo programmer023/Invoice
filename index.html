@@ -1046,6 +1046,7 @@
                                 <select id="newProdTaxType" class="select-control" onchange="toggleTaxMode(this.value)">
                                     <option value="GST">CGST + SGST (Intrastate)</option>
                                     <option value="IGST">IGST (Interstate)</option>
+                                    <option value="N/A">N/A (No Tax)</option>
                                 </select>
                             </div>
                             <div class="form-group" id="cgstGroup">
@@ -1704,6 +1705,10 @@
                 cgstGroup.style.display = 'none';
                 sgstGroup.style.display = 'none';
                 igstGroup.style.display = 'flex';
+            } else if (mode === 'N/A') {
+                cgstGroup.style.display = 'none';
+                sgstGroup.style.display = 'none';
+                igstGroup.style.display = 'none';
             } else {
                 cgstGroup.style.display = 'flex';
                 sgstGroup.style.display = 'flex';
@@ -1730,7 +1735,9 @@
             
             const basic = qty * rate;
             let taxPer = 0;
-            if (taxType === 'IGST') {
+            if (taxType === 'N/A') {
+                taxPer = 0;
+            } else if (taxType === 'IGST') {
                 taxPer = parseFloat(document.getElementById('newProdIGST').value) || 0;
             } else {
                 const cgst = parseFloat(document.getElementById('newProdCGST').value) || 0;
@@ -1763,7 +1770,11 @@
             const taxType = document.getElementById('newProdTaxType').value;
 
             let cgst = 0, sgst = 0, igst = 0;
-            if (taxType === 'IGST') {
+            if (taxType === 'N/A') {
+                cgst = 0;
+                sgst = 0;
+                igst = 0;
+            } else if (taxType === 'IGST') {
                 igst = parseFloat(document.getElementById('newProdIGST').value) || 0;
             } else {
                 cgst = parseFloat(document.getElementById('newProdCGST').value) || 0;
@@ -1771,7 +1782,7 @@
             }
 
             const rateQuantity = qty * rate;
-            const taxPer = taxType === 'IGST' ? igst : (cgst + sgst);
+            const taxPer = taxType === 'N/A' ? 0 : (taxType === 'IGST' ? igst : (cgst + sgst));
             const taxAmount = rateQuantity * (taxPer / 100);
             const total = rateQuantity + taxAmount;
 
@@ -1869,9 +1880,11 @@
                     <td class="input-mono">${formatCurrency(item.rate)}</td>
                     <td class="input-mono">${formatCurrency(item.rateQuantity)}</td>
                     <td class="input-mono">
-                        ${item.taxType === 'IGST' 
-                            ? `IGST (${item.igstPer}%)` 
-                            : `C:${item.cgstPer}% S:${item.sgstPer}%`}
+                        ${item.taxType === 'N/A' 
+                            ? 'N/A' 
+                            : (item.taxType === 'IGST' 
+                                ? `IGST (${item.igstPer}%)` 
+                                : `C:${item.cgstPer}% S:${item.sgstPer}%`)}
                     </td>
                     <td class="input-mono" style="font-weight: 700; color: var(--primary);">
                         ${formatCurrency(item.total)}
@@ -1911,7 +1924,9 @@
                     </div>
                     <div class="mobile-card-totals">
                         <span style="font-size: 0.8rem; color: var(--text-muted);">
-                            Tax: ${item.taxType === 'IGST' ? `IGST ${item.igstPer}%` : `GST ${item.cgstPer * 2}%`} (${formatCurrency(item.taxAmount)})
+                            Tax: ${item.taxType === 'N/A' 
+                                ? 'N/A' 
+                                : `${item.taxType === 'IGST' ? `IGST ${item.igstPer}%` : `GST ${item.cgstPer * 2}%`} (${formatCurrency(item.taxAmount)})`}
                         </span>
                         <span style="color: var(--primary); font-family: 'JetBrains Mono', monospace;">
                             ${formatCurrency(item.total)}
@@ -1935,7 +1950,9 @@
 
             products.forEach(p => {
                 basicTotal += p.rateQuantity;
-                if (p.taxType === 'IGST') {
+                if (p.taxType === 'N/A') {
+                    // Skip tax calculation
+                } else if (p.taxType === 'IGST') {
                     igstTotal += (p.igstPer / 100) * p.rateQuantity;
                 } else {
                     cgstTotal += (p.cgstPer / 100) * p.rateQuantity;
@@ -2056,9 +2073,11 @@
                         <td class="input-mono">${item.rate.toFixed(2)}</td>
                         <td class="input-mono">${item.rateQuantity.toFixed(2)}</td>
                         <td class="input-mono" style="font-size: 0.68rem;">
-                            ${item.taxType === 'IGST' 
-                                ? `IGST ${item.igstPer}%` 
-                                : `C:${item.cgstPer}% S:${item.sgstPer}%`}
+                            ${item.taxType === 'N/A' 
+                                ? 'N/A' 
+                                : (item.taxType === 'IGST' 
+                                    ? `IGST ${item.igstPer}%` 
+                                    : `C:${item.cgstPer}% S:${item.sgstPer}%`)}
                         </td>
                         <td class="input-mono" style="text-align: right; font-weight: 700;">${item.total.toFixed(2)}</td>
                     </tr>
@@ -2125,9 +2144,11 @@
 
             // Add real product rows
             products.forEach(item => {
-                const taxDesc = item.taxType === 'IGST' 
-                    ? `IGST (${item.igstPer}%)` 
-                    : `CGST ${item.cgstPer}%\nSGST ${item.sgstPer}%`;
+                const taxDesc = item.taxType === 'N/A' 
+                    ? 'N/A' 
+                    : (item.taxType === 'IGST' 
+                        ? `IGST (${item.igstPer}%)` 
+                        : `CGST ${item.cgstPer}%\nSGST ${item.sgstPer}%`);
 
                 pdfTableBody.push([
                     { text: item.no.toString(), alignment: 'center' },
