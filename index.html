@@ -55,99 +55,23 @@
             color: var(--text-main);
             line-height: 1.5;
             min-height: 100vh;
-            padding-bottom: 90px;
         }
 
-        /* Top Navigation Bar */
-        .top-navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 40;
-            padding: 0.75rem 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: var(--shadow-sm);
+        /* Container Layout (Maximized Screen Height) */
+        .app-container {
+            max-width: 1440px;
+            margin: 0.5rem auto;
+            padding: 0 0.75rem;
         }
 
-        /* Hide Top Header in Mobile View for Maximum Screen Space */
         @media (max-width: 768px) {
-            .top-navbar {
-                display: none !important;
-            }
             body {
                 padding-top: 0.25rem;
             }
             .app-container {
-                margin: 0.4rem auto;
-                padding: 0 0.6rem;
+                margin: 0.25rem auto;
+                padding: 0 0.5rem;
             }
-        }
-
-        .brand-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .brand-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-md);
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
-        }
-
-        .brand-title {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--secondary);
-            letter-spacing: -0.02em;
-        }
-
-        .brand-subtitle {
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-
-        .badge-sync {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            background: var(--success-light);
-            color: var(--success);
-            padding: 0.3rem 0.65rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-
-        .badge-sync.saving {
-            background: #fffbeb;
-            color: var(--warning);
-            border-color: rgba(245, 158, 11, 0.2);
-        }
-
-        /* Container Layout */
-        .app-container {
-            max-width: 1440px;
-            margin: 1.25rem auto;
-            padding: 0 1rem;
         }
 
         .main-grid {
@@ -171,11 +95,23 @@
             padding: 0.4rem;
             border-radius: var(--radius-lg);
             border: 1px solid var(--border);
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
             overflow-x: auto;
             scrollbar-width: none;
         }
         .step-tabs::-webkit-scrollbar { display: none; }
+
+        /* Fixed / Sticky Navigation on Top for Desktop/Laptop Only */
+        @media (min-width: 769px) {
+            .step-tabs {
+                position: sticky;
+                top: 0.4rem;
+                z-index: 50;
+                background: rgba(255, 255, 255, 0.96);
+                backdrop-filter: blur(12px);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            }
+        }
 
         .tab-btn {
             flex: 1;
@@ -629,47 +565,7 @@
             min-height: 95px;
         }
 
-        /* Sticky Mobile Action Bar */
-        .mobile-bottom-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid var(--border);
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 50;
-            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
-        }
 
-        .total-summary-mini {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .total-summary-label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .total-summary-amount {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--primary);
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .action-btns-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
 
         /* Toast Notifications */
         .toast-container {
@@ -714,35 +610,7 @@
 </head>
 <body>
 
-    <!-- Top Sticky Bar -->
-    <header class="top-navbar">
-        <div class="brand-wrapper">
-            <div class="brand-icon">
-                <i data-lucide="receipt-text" style="width: 22px; height: 22px;"></i>
-            </div>
-            <div>
-                <h1 class="brand-title">Tax Invoice Pro</h1>
-                <div class="brand-subtitle">GST Billing & Dynamic Invoice Studio</div>
-            </div>
-        </div>
-
-        <div class="nav-actions">
-            <span id="sessionStatus" class="badge-sync">
-                <i data-lucide="check-circle-2" style="width: 14px; height: 14px;"></i>
-                <span>Session Synced</span>
-            </span>
-            <button class="btn btn-secondary btn-sm" onclick="loadSampleData()" title="Fill sample data for quick preview">
-                <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
-                <span class="hide-mobile">Sample</span>
-            </button>
-            <button class="btn btn-danger btn-sm" onclick="resetForm()" title="Clear form">
-                <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i>
-                <span class="hide-mobile">Reset</span>
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Content Container -->
+    <!-- Main Content Container (Full Viewport Height) -->
     <main class="app-container">
 
         <!-- Navigation Tabs / Flow -->
@@ -924,20 +792,14 @@
 
                         <div class="form-grid cols-3">
                             <div class="form-group">
-                                <label class="form-label">Document / Bill Type <span class="required">*</span></label>
-                                <select id="billType" class="select-control" style="font-weight: 700; color: var(--primary);" onchange="updateInvoicePreview();">
-                                    <option value="TAX INVOICE" selected>TAX INVOICE</option>
-                                    <option value="ESTIMATE">ESTIMATE</option>
-                                    <option value="PROFORMA INVOICE">PROFORMA INVOICE</option>
-                                    <option value="QUOTATION">QUOTATION</option>
-                                    <option value="BILL OF SUPPLY">BILL OF SUPPLY</option>
-                                    <option value="DELIVERY CHALLAN">DELIVERY CHALLAN</option>
-                                    <option value="CASH MEMO">CASH MEMO</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Invoice / Ref No. <span class="required">*</span></label>
-                                <input type="text" id="invoiceNo" class="input-control input-mono" placeholder="GST/2026/001" oninput="updateInvoicePreview();">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                                    <label class="form-label" style="margin-bottom: 0;">Invoice / Ref No. <span class="required">*</span></label>
+                                    <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.15rem 0.5rem; font-size: 0.72rem; height: auto;" onclick="manualIncrementInvoiceNo()" title="Auto-increment to next invoice number">
+                                        <i data-lucide="plus" style="width: 12px; height: 12px;"></i>
+                                        <span>Next No.</span>
+                                    </button>
+                                </div>
+                                <input type="text" id="invoiceNo" class="input-control input-mono" placeholder="GST/2026/001" oninput="onInvoiceNoChange(this.value)">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Invoice Date <span class="required">*</span></label>
@@ -1004,13 +866,58 @@
                 <!-- TAB 3: DYNAMIC PRODUCTS & LINE ITEMS -->
                 <section id="tab-items" class="tab-content" style="display: none;">
                     <div class="card">
+                        <!-- Top Invoice Configuration Controls: 3 Dropdowns in a Single Compact Line -->
+                        <div class="config-bar-compact" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; margin-bottom: 0.85rem; padding: 0.45rem 0.65rem; background: var(--primary-light); border: 1px solid var(--primary-border); border-radius: var(--radius-md);">
+                            <!-- Document / Bill Type Selector -->
+                            <div style="display: flex; flex-direction: column; gap: 0.2rem; min-width: 0;">
+                                <div style="display: flex; align-items: center; gap: 0.35rem;">
+                                    <i data-lucide="file-text" style="width: 13px; height: 13px; color: var(--primary); flex-shrink: 0;"></i>
+                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Document / Bill Type</span>
+                                </div>
+                                <select id="billType" class="select-control" style="font-weight: 700; font-size: 0.78rem; padding: 0.3rem 0.5rem; height: 32px; color: var(--primary); border-color: var(--primary-border); background-color: white;" onchange="updateInvoicePreview();">
+                                    <option value="TAX INVOICE" selected>TAX INVOICE</option>
+                                    <option value="ESTIMATE">ESTIMATE</option>
+                                    <option value="PROFORMA INVOICE">PROFORMA INVOICE</option>
+                                    <option value="QUOTATION">QUOTATION</option>
+                                    <option value="BILL OF SUPPLY">BILL OF SUPPLY</option>
+                                    <option value="DELIVERY CHALLAN">DELIVERY CHALLAN</option>
+                                    <option value="CASH MEMO">CASH MEMO</option>
+                                </select>
+                            </div>
+
+                            <!-- Line Item Format Selector -->
+                            <div style="display: flex; flex-direction: column; gap: 0.2rem; min-width: 0;">
+                                <div style="display: flex; align-items: center; gap: 0.35rem;">
+                                    <i data-lucide="layers" style="width: 13px; height: 13px; color: var(--primary); flex-shrink: 0;"></i>
+                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Line Item Format</span>
+                                </div>
+                                <select id="itemFlavor" class="select-control" style="font-weight: 700; font-size: 0.78rem; padding: 0.3rem 0.5rem; height: 32px; color: var(--primary); border-color: var(--primary-border); background-color: white;" onchange="switchItemFlavor(this.value)">
+                                    <option value="STANDARD" selected>Standard (Qty × Rate)</option>
+                                    <option value="SQFT">Sq.Ft. (Length × Breadth)</option>
+                                </select>
+                            </div>
+
+                            <!-- Bill Tax Type Selector -->
+                            <div style="display: flex; flex-direction: column; gap: 0.2rem; min-width: 0;">
+                                <div style="display: flex; align-items: center; gap: 0.35rem;">
+                                    <i data-lucide="percent" style="width: 13px; height: 13px; color: var(--primary); flex-shrink: 0;"></i>
+                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Bill Tax Type</span>
+                                </div>
+                                <select id="invoiceTaxType" class="select-control" style="font-weight: 700; font-size: 0.78rem; padding: 0.3rem 0.5rem; height: 32px; color: var(--primary); border-color: var(--primary-border); background-color: white;" onchange="switchInvoiceTaxType(this.value)">
+                                    <option value="GST" selected>CGST + SGST (Intra)</option>
+                                    <option value="IGST">IGST (Interstate)</option>
+                                    <option value="N/A">N/A (No Tax)</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="card-header">
                             <div>
                                 <h2 class="card-title">
                                     <i data-lucide="package-plus" style="width: 18px; height: 18px;"></i>
                                     Add New Line Item
                                 </h2>
-                                <p class="card-subtitle">Enter product description, quantity, unit rate, and GST rate.</p>
+                                <p class="card-subtitle">Enter product description, dimensions, quantity, rate, and tax.</p>
                             </div>
                             <button type="button" class="btn btn-primary btn-sm" onclick="addNewProductFromForm()">
                                 <i data-lucide="plus-circle" style="width: 15px; height: 15px;"></i>
@@ -1018,13 +925,13 @@
                             </button>
                         </div>
 
-                        <div class="form-grid cols-4">
+                        <div class="form-grid cols-4" id="itemFormGrid">
                             <div class="form-group full-width" style="grid-column: span 2;">
                                 <label class="form-label">
                                     <span>Description of Goods / Services <span class="required">*</span></span>
                                     <span style="font-size: 0.7rem; color: var(--primary); font-weight: 600;" id="catalogCountLabel"></span>
                                 </label>
-                                <input type="text" id="newProdName" class="input-control" list="savedItemSuggestions" placeholder="e.g. Industrial Printing Ink - Black (5L)" oninput="handleDescriptionInput(this.value)" autocomplete="off">
+                                <input type="text" id="newProdName" class="input-control" list="savedItemSuggestions" placeholder="e.g. Acrylic Sheet / Screen Printing Ink" oninput="handleDescriptionInput(this.value)" autocomplete="off">
                                 <datalist id="savedItemSuggestions"></datalist>
                                 <div id="quickItemChips" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem;"></div>
                             </div>
@@ -1033,21 +940,23 @@
                                 <input type="text" id="newProdHSN" class="input-control input-mono" placeholder="3215">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Quantity <span class="required">*</span></label>
+                                <label class="form-label" id="qtyLabel">Quantity <span class="required">*</span></label>
                                 <input type="number" id="newProdQty" class="input-control input-mono" value="1" min="0.01" step="any" oninput="calculateNewProdPreview()">
                             </div>
 
-                            <div class="form-group">
-                                <label class="form-label">Unit Rate (₹) <span class="required">*</span></label>
-                                <input type="number" id="newProdRate" class="input-control input-mono" value="1000" min="0" step="any" oninput="calculateNewProdPreview()">
+                            <!-- Additional Sq.Ft. Dimensions Inputs (Visible in SQFT mode) -->
+                            <div class="form-group" id="lengthGroup" style="display: none;">
+                                <label class="form-label">Sq. Length (L) <span class="required">*</span></label>
+                                <input type="number" id="newProdLength" class="input-control input-mono" value="10" min="0.01" step="any" placeholder="10" oninput="calculateNewProdPreview()">
                             </div>
+                            <div class="form-group" id="breadthGroup" style="display: none;">
+                                <label class="form-label">Sq. Breadth (B) <span class="required">*</span></label>
+                                <input type="number" id="newProdBreadth" class="input-control input-mono" value="20" min="0.01" step="any" placeholder="20" oninput="calculateNewProdPreview()">
+                            </div>
+
                             <div class="form-group">
-                                <label class="form-label">Tax Type</label>
-                                <select id="newProdTaxType" class="select-control" onchange="toggleTaxMode(this.value)">
-                                    <option value="GST">CGST + SGST (Intrastate)</option>
-                                    <option value="IGST">IGST (Interstate)</option>
-                                    <option value="N/A">N/A (No Tax)</option>
-                                </select>
+                                <label class="form-label" id="rateLabel">Unit Rate (₹) <span class="required">*</span></label>
+                                <input type="number" id="newProdRate" class="input-control input-mono" value="1000" min="0" step="any" oninput="calculateNewProdPreview()">
                             </div>
                             <div class="form-group" id="cgstGroup">
                                 <label class="form-label">CGST %</label>
@@ -1064,9 +973,9 @@
                         </div>
 
                         <div style="margin-top: 1rem; padding: 0.75rem; background: var(--surface-subtle); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">
-                                Basic: <strong id="newProdBasicPreview" style="color: var(--text-main);">₹ 1,000.00</strong> | 
-                                Tax: <strong id="newProdTaxPreview" style="color: var(--text-main);">₹ 180.00</strong>
+                            <span style="font-size: 0.85rem; color: var(--text-muted);" id="newProdBasicPreview">
+                                Basic: <strong style="color: var(--text-main);">₹ 1,000.00</strong> | 
+                                Tax: <strong style="color: var(--text-main);">₹ 180.00</strong>
                             </span>
                             <span style="font-size: 0.95rem; font-weight: 700; color: var(--primary);">
                                 Total: <span id="newProdTotalPreview">₹ 1,180.00</span>
@@ -1076,11 +985,12 @@
 
                     <!-- Products List Table / Cards -->
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
                             <div>
-                                <h2 class="card-title">
+                                <h2 class="card-title" style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
                                     <i data-lucide="list-ordered" style="width: 18px; height: 18px;"></i>
-                                    Invoice Line Items (<span id="itemsListCount">0</span>)
+                                    <span>Invoice Line Items (<span id="itemsListCount">0</span>)</span>
+                                    <span id="itemsHeaderGrandTotal" style="font-size: 0.85rem; font-weight: 800; color: var(--primary); background: var(--primary-light); border: 1px solid var(--primary-border); padding: 0.2rem 0.65rem; border-radius: 20px; font-family: 'JetBrains Mono', monospace;">₹ 0.00</span>
                                 </h2>
                                 <p class="card-subtitle">Review, adjust or remove products added to this invoice.</p>
                             </div>
@@ -1100,7 +1010,7 @@
                         <!-- Desktop Table View -->
                         <div class="desktop-table-wrapper" id="desktopTableWrapper" style="display: none;">
                             <table class="invoice-table">
-                                <thead>
+                                <thead id="desktopTableHead">
                                     <tr>
                                         <th style="width: 45px;">#</th>
                                         <th>Description</th>
@@ -1263,7 +1173,7 @@
 
                         <!-- Live Products Table in Preview -->
                         <table class="doc-table">
-                            <thead>
+                            <thead id="prevTableHead">
                                 <tr>
                                     <th style="width: 25px;">#</th>
                                     <th>Description</th>
@@ -1286,10 +1196,10 @@
                         <!-- Totals & Tax Summary in Document -->
                         <div class="doc-totals">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-                                <span>Subtotal (Taxable):</span>
+                                <span id="prevSubtotalLabel">Subtotal (Taxable):</span>
                                 <strong id="prevSubtotal">₹ 0.00</strong>
                             </div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <div id="prevTaxRow" style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
                                 <span id="prevTaxLabel">Total Taxes (CGST + SGST):</span>
                                 <strong id="prevTotalTax">₹ 0.00</strong>
                             </div>
@@ -1336,24 +1246,6 @@
         </div>
     </main>
 
-    <!-- Sticky Bottom Bar for Mobile Actions -->
-    <div class="mobile-bottom-bar">
-        <div class="total-summary-mini">
-            <span class="total-summary-label">Grand Total (<span id="mobileItemCount">0</span> items)</span>
-            <span class="total-summary-amount" id="mobileGrandTotal">₹ 0.00</span>
-        </div>
-        <div class="action-btns-group">
-            <button class="btn btn-secondary btn-sm" onclick="switchTab('tab-preview')">
-                <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
-                <span>Preview</span>
-            </button>
-            <button class="btn btn-primary btn-sm" onclick="generateAndDownloadPDF('download')">
-                <i data-lucide="file-down" style="width: 16px; height: 16px;"></i>
-                <span>Get PDF</span>
-            </button>
-        </div>
-    </div>
-
     <!-- Toast Container -->
     <div id="toastContainer" class="toast-container"></div>
 
@@ -1363,6 +1255,7 @@
         // ==========================================
         const SELLER_STORAGE_KEY = 'GST_INVOICE_SELLER_PROFILE';
         const CATALOG_STORAGE_KEY = 'GST_INVOICE_PRODUCTS_CATALOG';
+        const INVOICE_NO_STORAGE_KEY = 'GST_INVOICE_LAST_REF_NO';
 
         let savedProductsCatalog = [];
 
@@ -1391,7 +1284,9 @@
 
         let invoiceMeta = {
             billType: 'TAX INVOICE',
-            invoiceNo: 'GST/2026/001',
+            itemFlavor: 'STANDARD',
+            taxType: 'GST',
+            invoiceNo: 'GST/' + new Date().getFullYear() + '/001',
             invoiceDate: new Date().toISOString().split('T')[0],
             deliveryNote: '',
             modeTermsOfPayment: 'Cash / NEFT',
@@ -1406,43 +1301,61 @@
             termsOfDelivery: 'Immediate'
         };
 
-        let products = [
-            {
-                no: 1,
-                name: 'Screen Printing Ink - High Gloss',
-                hsncode: '3215',
-                quantity: 10,
-                rate: 450,
-                taxType: 'GST',
-                cgstPer: 9,
-                sgstPer: 9,
-                igstPer: 0,
-                rateQuantity: 4500,
-                taxAmount: 810,
-                total: 5310
-            },
-            {
-                no: 2,
-                name: 'Thinner Solvent (5 Litre Can)',
-                hsncode: '3814',
-                quantity: 2,
-                rate: 1200,
-                taxType: 'GST',
-                cgstPer: 9,
-                sgstPer: 9,
-                igstPer: 0,
-                rateQuantity: 2400,
-                taxAmount: 432,
-                total: 2832
-            }
-        ];
+        let products = [];
 
         let roundOff = 0.00;
+
+        // Auto-increment helper (supports formats like GST/2026/001, INV-049, 101, etc.)
+        function incrementInvoiceNumber(invNo) {
+            if (!invNo || typeof invNo !== 'string') return `GST/${new Date().getFullYear()}/001`;
+            
+            const match = invNo.match(/^(.*?)(\d+)([^\d]*)$/);
+            if (match) {
+                const prefix = match[1];
+                const numStr = match[2];
+                const suffix = match[3];
+                const nextNum = parseInt(numStr, 10) + 1;
+                const paddedNextNum = String(nextNum).padStart(numStr.length, '0');
+                return `${prefix}${paddedNextNum}${suffix}`;
+            }
+            return `${invNo}-001`;
+        }
+
+        function loadInvoiceNumberFromStorage() {
+            const savedNo = localStorage.getItem(INVOICE_NO_STORAGE_KEY);
+            if (savedNo && savedNo.trim()) {
+                invoiceMeta.invoiceNo = savedNo.trim();
+            } else {
+                invoiceMeta.invoiceNo = `GST/${new Date().getFullYear()}/001`;
+                localStorage.setItem(INVOICE_NO_STORAGE_KEY, invoiceMeta.invoiceNo);
+            }
+        }
+
+        function onInvoiceNoChange(val) {
+            const trimmed = val ? val.trim() : '';
+            invoiceMeta.invoiceNo = trimmed;
+            if (trimmed) {
+                localStorage.setItem(INVOICE_NO_STORAGE_KEY, trimmed);
+            }
+            updateInvoicePreview();
+        }
+
+        function manualIncrementInvoiceNo() {
+            const currentNo = (document.getElementById('invoiceNo') && document.getElementById('invoiceNo').value) || invoiceMeta.invoiceNo || `GST/${new Date().getFullYear()}/001`;
+            const nextNo = incrementInvoiceNumber(currentNo);
+            invoiceMeta.invoiceNo = nextNo;
+            localStorage.setItem(INVOICE_NO_STORAGE_KEY, nextNo);
+            const invInput = document.getElementById('invoiceNo');
+            if (invInput) invInput.value = nextNo;
+            updateInvoicePreview();
+            showToast(`Invoice No. incremented to ${nextNo}`);
+        }
 
         // Initialize App on DOM load
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             loadSellerFromSessionOrLocal();
+            loadInvoiceNumberFromStorage();
             loadProductsCatalog();
             populateFormFields();
             renderProducts();
@@ -1452,11 +1365,19 @@
         });
 
         // ==========================================
-        // PRODUCTS CATALOG (SESSION STORAGE & AUTOCOMPLETE)
+        // PRODUCTS CATALOG (SEGREGATED BY FLAVOR TYPE)
         // ==========================================
-        function loadProductsCatalog() {
+        function getCatalogStorageKey(flavor) {
+            const f = flavor || (invoiceMeta && invoiceMeta.itemFlavor) || (document.getElementById('itemFlavor') && document.getElementById('itemFlavor').value) || 'STANDARD';
+            return `GST_INVOICE_PRODUCTS_CATALOG_${f}`;
+        }
+
+        function loadProductsCatalog(flavor) {
+            const activeFlavor = flavor || (invoiceMeta && invoiceMeta.itemFlavor) || 'STANDARD';
+            const key = getCatalogStorageKey(activeFlavor);
+
             // First check sessionStorage
-            const sessionData = sessionStorage.getItem(CATALOG_STORAGE_KEY);
+            const sessionData = sessionStorage.getItem(key);
             if (sessionData) {
                 try {
                     savedProductsCatalog = JSON.parse(sessionData) || [];
@@ -1465,26 +1386,49 @@
                 } catch(e) {}
             }
 
-            // Fallback to localStorage if available
-            const localData = localStorage.getItem(CATALOG_STORAGE_KEY);
+            // Fallback to localStorage
+            const localData = localStorage.getItem(key);
             if (localData) {
                 try {
                     savedProductsCatalog = JSON.parse(localData) || [];
-                    sessionStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(savedProductsCatalog));
+                    sessionStorage.setItem(key, JSON.stringify(savedProductsCatalog));
+                    renderCatalogSuggestions();
+                    return;
                 } catch(e) {}
             }
+
+            // Fallback for legacy un-segregated STANDARD items
+            if (activeFlavor === 'STANDARD') {
+                const legacy = sessionStorage.getItem('GST_INVOICE_PRODUCTS_CATALOG') || localStorage.getItem('GST_INVOICE_PRODUCTS_CATALOG');
+                if (legacy) {
+                    try {
+                        savedProductsCatalog = JSON.parse(legacy) || [];
+                        sessionStorage.setItem(key, JSON.stringify(savedProductsCatalog));
+                        localStorage.setItem(key, JSON.stringify(savedProductsCatalog));
+                        renderCatalogSuggestions();
+                        return;
+                    } catch(e) {}
+                }
+            }
+
+            savedProductsCatalog = [];
             renderCatalogSuggestions();
         }
 
         function saveProductToCatalog(item) {
             if (!item || !item.name || !item.name.trim()) return;
             const cleanName = item.name.trim();
+            const flavor = (invoiceMeta && invoiceMeta.itemFlavor) || 'STANDARD';
+            const key = getCatalogStorageKey(flavor);
 
             const existingIndex = savedProductsCatalog.findIndex(p => p.name.toLowerCase() === cleanName.toLowerCase());
             const catalogItem = {
                 name: cleanName,
+                flavor: flavor,
                 hsncode: item.hsncode || '',
                 rate: item.rate || 0,
+                length: item.length || 10,
+                breadth: item.breadth || 20,
                 taxType: item.taxType || 'GST',
                 cgstPer: item.cgstPer || 9,
                 sgstPer: item.sgstPer || 9,
@@ -1499,13 +1443,13 @@
                 savedProductsCatalog.unshift(catalogItem);
             }
 
-            // Keep top 30 items
+            // Keep top 30 items for this flavor
             if (savedProductsCatalog.length > 30) {
                 savedProductsCatalog = savedProductsCatalog.slice(0, 30);
             }
 
-            sessionStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(savedProductsCatalog));
-            localStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(savedProductsCatalog));
+            sessionStorage.setItem(key, JSON.stringify(savedProductsCatalog));
+            localStorage.setItem(key, JSON.stringify(savedProductsCatalog));
             renderCatalogSuggestions();
         }
 
@@ -1513,29 +1457,31 @@
             const datalist = document.getElementById('savedItemSuggestions');
             const chipsContainer = document.getElementById('quickItemChips');
             const countLabel = document.getElementById('catalogCountLabel');
+            const flavor = (invoiceMeta && invoiceMeta.itemFlavor) || 'STANDARD';
+            const flavorLabel = flavor === 'SQFT' ? 'Sq.Ft.' : 'Standard';
 
             if (countLabel) {
                 countLabel.innerText = savedProductsCatalog.length > 0 
-                    ? `(${savedProductsCatalog.length} saved items)` 
+                    ? `(${savedProductsCatalog.length} saved ${flavorLabel} items)` 
                     : '';
             }
 
             if (datalist) {
                 datalist.innerHTML = savedProductsCatalog.map(p => `
-                    <option value="${escapeHtml(p.name)}">${p.hsncode ? `HSN: ${escapeHtml(p.hsncode)} | ` : ''}Rate: ₹${p.rate}</option>
+                    <option value="${escapeHtml(p.name)}">${p.hsncode ? `HSN: ${escapeHtml(p.hsncode)} | ` : ''}${flavor === 'SQFT' && p.length && p.breadth ? `Size: ${p.length}*${p.breadth} | ` : ''}Rate: ₹${p.rate}</option>
                 `).join('');
             }
 
             if (chipsContainer) {
                 if (savedProductsCatalog.length === 0) {
-                    chipsContainer.innerHTML = '';
+                    chipsContainer.innerHTML = `<span style="font-size: 0.72rem; color: var(--text-subtle); font-style: italic;">No saved tags yet for ${flavorLabel} flavor</span>`;
                 } else {
                     // Show up to 8 quick clickable chips with delete button
                     const topItems = savedProductsCatalog.slice(0, 8);
                     chipsContainer.innerHTML = topItems.map((p, idx) => `
                         <span class="catalog-chip" onclick="selectSavedCatalogItem(${idx})" title="Click to auto-fill">
                             <i data-lucide="tag" style="width: 11px; height: 11px; color: var(--primary);"></i>
-                            <span class="chip-text">${escapeHtml(p.name.length > 24 ? p.name.substring(0, 21) + '...' : p.name)}</span>
+                            <span class="chip-text">${escapeHtml(p.name.length > 22 ? p.name.substring(0, 19) + '...' : p.name)}${flavor === 'SQFT' && p.length && p.breadth ? ` <span style="opacity:0.75; font-size:0.68rem;">(${p.length}*${p.breadth})</span>` : ''}</span>
                             <button type="button" class="chip-del-btn" onclick="event.stopPropagation(); deleteSavedCatalogItem(${idx});" title="Remove tag">
                                 <i data-lucide="x" style="width: 11px; height: 11px;"></i>
                             </button>
@@ -1548,9 +1494,10 @@
 
         function deleteSavedCatalogItem(index) {
             if (index >= 0 && index < savedProductsCatalog.length) {
+                const key = getCatalogStorageKey();
                 const removed = savedProductsCatalog.splice(index, 1);
-                sessionStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(savedProductsCatalog));
-                localStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(savedProductsCatalog));
+                sessionStorage.setItem(key, JSON.stringify(savedProductsCatalog));
+                localStorage.setItem(key, JSON.stringify(savedProductsCatalog));
                 renderCatalogSuggestions();
                 if (removed.length > 0) {
                     showToast(`Deleted "${removed[0].name}" tag`);
@@ -1572,13 +1519,14 @@
             if (matched) {
                 if (matched.hsncode) document.getElementById('newProdHSN').value = matched.hsncode;
                 if (matched.rate !== undefined) document.getElementById('newProdRate').value = matched.rate;
-                if (matched.taxType) {
-                    document.getElementById('newProdTaxType').value = matched.taxType;
-                    toggleTaxMode(matched.taxType);
-                }
-                if (matched.taxType === 'IGST') {
+                if (matched.length !== undefined && document.getElementById('newProdLength')) document.getElementById('newProdLength').value = matched.length;
+                if (matched.breadth !== undefined && document.getElementById('newProdBreadth')) document.getElementById('newProdBreadth').value = matched.breadth;
+                
+                const activeTaxType = (document.getElementById('invoiceTaxType') && document.getElementById('invoiceTaxType').value) || invoiceMeta.taxType || 'GST';
+                if (activeTaxType === 'IGST') {
                     if (matched.igstPer !== undefined) document.getElementById('newProdIGST').value = matched.igstPer;
-                } else {
+                    else if (matched.cgstPer && matched.sgstPer) document.getElementById('newProdIGST').value = matched.cgstPer + matched.sgstPer;
+                } else if (activeTaxType === 'GST') {
                     if (matched.cgstPer !== undefined) document.getElementById('newProdCGST').value = matched.cgstPer;
                     if (matched.sgstPer !== undefined) document.getElementById('newProdSGST').value = matched.sgstPer;
                 }
@@ -1678,6 +1626,14 @@
                 if (el) el.value = invoiceMeta[key] || '';
             }
 
+            if (invoiceMeta.itemFlavor) {
+                switchItemFlavor(invoiceMeta.itemFlavor);
+            }
+
+            if (invoiceMeta.taxType) {
+                switchInvoiceTaxType(invoiceMeta.taxType);
+            }
+
             const roundOffEl = document.getElementById('roundOffInput');
             if (roundOffEl) roundOffEl.value = roundOff;
         }
@@ -1696,22 +1652,105 @@
             lucide.createIcons();
         }
 
+        function switchItemFlavor(flavor) {
+            invoiceMeta.itemFlavor = flavor || 'STANDARD';
+            const isSqft = (invoiceMeta.itemFlavor === 'SQFT');
+
+            const lengthGroup = document.getElementById('lengthGroup');
+            const breadthGroup = document.getElementById('breadthGroup');
+            const qtyLabel = document.getElementById('qtyLabel');
+            const rateLabel = document.getElementById('rateLabel');
+            const flavorSelect = document.getElementById('itemFlavor');
+
+            if (flavorSelect) flavorSelect.value = invoiceMeta.itemFlavor;
+            if (lengthGroup) lengthGroup.style.display = isSqft ? 'block' : 'none';
+            if (breadthGroup) breadthGroup.style.display = isSqft ? 'block' : 'none';
+            if (qtyLabel) qtyLabel.innerHTML = isSqft ? 'Quantity (Pcs) <span class="required">*</span>' : 'Quantity <span class="required">*</span>';
+            if (rateLabel) rateLabel.innerHTML = isSqft ? 'Rate (₹ / Sq.Ft.) <span class="required">*</span>' : 'Unit Rate (₹) <span class="required">*</span>';
+
+            // Recalculate existing items according to flavor
+            products.forEach(p => {
+                if (isSqft) {
+                    p.length = parseFloat(p.length) || 10;
+                    p.breadth = parseFloat(p.breadth) || 20;
+                    p.sqft = `${p.length}*${p.breadth}`;
+                    p.totalSqft = (p.quantity || 1) * p.length * p.breadth;
+                    p.rateQuantity = p.totalSqft * p.rate;
+                } else {
+                    p.rateQuantity = (p.quantity || 1) * p.rate;
+                }
+                const taxPer = p.taxType === 'N/A' ? 0 : (p.taxType === 'IGST' ? (p.igstPer || 0) : ((p.cgstPer || 0) + (p.sgstPer || 0)));
+                p.taxAmount = p.rateQuantity * (taxPer / 100);
+                p.total = p.rateQuantity + p.taxAmount;
+            });
+
+            // Load and display flavor-specific product catalog tags
+            loadProductsCatalog(invoiceMeta.itemFlavor);
+
+            calculateNewProdPreview();
+            renderProducts();
+            updateTotals();
+            updateInvoicePreview();
+        }
+
+        function switchInvoiceTaxType(taxType) {
+            invoiceMeta.taxType = taxType || 'GST';
+            const activeTaxType = invoiceMeta.taxType;
+
+            const invoiceTaxTypeEl = document.getElementById('invoiceTaxType');
+            if (invoiceTaxTypeEl) invoiceTaxTypeEl.value = activeTaxType;
+
+            // Toggle tax rate percentage inputs visibility for the Add Item form
+            toggleTaxMode(activeTaxType);
+
+            // Synchronize all existing items in products array
+            products.forEach(p => {
+                p.taxType = activeTaxType;
+                if (activeTaxType === 'N/A') {
+                    p.taxAmount = 0;
+                    p.total = p.rateQuantity;
+                } else if (activeTaxType === 'IGST') {
+                    if (!p.igstPer || p.igstPer === 0) {
+                        p.igstPer = (p.cgstPer || 9) + (p.sgstPer || 9);
+                    }
+                    p.taxAmount = p.rateQuantity * (p.igstPer / 100);
+                    p.total = p.rateQuantity + p.taxAmount;
+                } else { // 'GST' (CGST + SGST)
+                    if (!p.cgstPer && !p.sgstPer) {
+                        const half = (p.igstPer || 18) / 2;
+                        p.cgstPer = half;
+                        p.sgstPer = half;
+                    }
+                    const taxPer = (p.cgstPer || 9) + (p.sgstPer || 9);
+                    p.taxAmount = p.rateQuantity * (taxPer / 100);
+                    p.total = p.rateQuantity + p.taxAmount;
+                }
+            });
+
+            calculateNewProdPreview();
+            renderProducts();
+            updateTotals();
+            updateInvoicePreview();
+        }
+
         function toggleTaxMode(mode) {
             const cgstGroup = document.getElementById('cgstGroup');
             const sgstGroup = document.getElementById('sgstGroup');
             const igstGroup = document.getElementById('igstGroup');
 
+            if (!cgstGroup || !sgstGroup || !igstGroup) return;
+
             if (mode === 'IGST') {
                 cgstGroup.style.display = 'none';
                 sgstGroup.style.display = 'none';
-                igstGroup.style.display = 'flex';
+                igstGroup.style.display = 'block';
             } else if (mode === 'N/A') {
                 cgstGroup.style.display = 'none';
                 sgstGroup.style.display = 'none';
                 igstGroup.style.display = 'none';
             } else {
-                cgstGroup.style.display = 'flex';
-                sgstGroup.style.display = 'flex';
+                cgstGroup.style.display = 'block';
+                sgstGroup.style.display = 'block';
                 igstGroup.style.display = 'none';
             }
             calculateNewProdPreview();
@@ -1729,11 +1768,26 @@
         }
 
         function calculateNewProdPreview() {
+            const flavor = (document.getElementById('itemFlavor') && document.getElementById('itemFlavor').value) || invoiceMeta.itemFlavor || 'STANDARD';
             const qty = parseFloat(document.getElementById('newProdQty').value) || 0;
             const rate = parseFloat(document.getElementById('newProdRate').value) || 0;
-            const taxType = document.getElementById('newProdTaxType').value;
+            const taxType = (document.getElementById('invoiceTaxType') && document.getElementById('invoiceTaxType').value) || invoiceMeta.taxType || 'GST';
             
-            const basic = qty * rate;
+            let basic = 0;
+            let sqftStr = '';
+            let totalSqft = 0;
+
+            if (flavor === 'SQFT') {
+                const length = parseFloat(document.getElementById('newProdLength').value) || 0;
+                const breadth = parseFloat(document.getElementById('newProdBreadth').value) || 0;
+                sqftStr = `${length}*${breadth}`;
+                totalSqft = qty * length * breadth;
+                basic = totalSqft * rate;
+            } else {
+                basic = qty * rate;
+                totalSqft = qty;
+            }
+
             let taxPer = 0;
             if (taxType === 'N/A') {
                 taxPer = 0;
@@ -1748,9 +1802,17 @@
             const tax = basic * (taxPer / 100);
             const total = basic + tax;
 
-            document.getElementById('newProdBasicPreview').innerText = formatCurrency(basic);
-            document.getElementById('newProdTaxPreview').innerText = formatCurrency(tax);
-            document.getElementById('newProdTotalPreview').innerText = formatCurrency(total);
+            let previewHtml = '';
+            if (flavor === 'SQFT') {
+                previewHtml = `Sq.ft: <strong>${sqftStr}</strong> | T.Sq.ft: <strong>${totalSqft.toFixed(2)}</strong> | Basic: <strong>${formatCurrency(basic)}</strong> | Tax: <strong>${formatCurrency(tax)}</strong>`;
+            } else {
+                previewHtml = `Basic: <strong>${formatCurrency(basic)}</strong> | Tax: <strong>${formatCurrency(tax)}</strong>`;
+            }
+
+            const basicPrevEl = document.getElementById('newProdBasicPreview');
+            if (basicPrevEl) basicPrevEl.innerHTML = previewHtml;
+            const totalPrevEl = document.getElementById('newProdTotalPreview');
+            if (totalPrevEl) totalPrevEl.innerText = formatCurrency(total);
         }
 
         // ==========================================
@@ -1767,7 +1829,20 @@
             const hsn = document.getElementById('newProdHSN').value.trim();
             const qty = parseFloat(document.getElementById('newProdQty').value) || 1;
             const rate = parseFloat(document.getElementById('newProdRate').value) || 0;
-            const taxType = document.getElementById('newProdTaxType').value;
+            const taxType = (document.getElementById('invoiceTaxType') && document.getElementById('invoiceTaxType').value) || invoiceMeta.taxType || 'GST';
+            const flavor = (document.getElementById('itemFlavor') && document.getElementById('itemFlavor').value) || invoiceMeta.itemFlavor || 'STANDARD';
+
+            let length = 0, breadth = 0, sqft = '', totalSqft = 0, rateQuantity = 0;
+            if (flavor === 'SQFT') {
+                length = parseFloat(document.getElementById('newProdLength').value) || 1;
+                breadth = parseFloat(document.getElementById('newProdBreadth').value) || 1;
+                sqft = `${length}*${breadth}`;
+                totalSqft = qty * length * breadth;
+                rateQuantity = totalSqft * rate;
+            } else {
+                rateQuantity = qty * rate;
+                totalSqft = qty;
+            }
 
             let cgst = 0, sgst = 0, igst = 0;
             if (taxType === 'N/A') {
@@ -1781,7 +1856,6 @@
                 sgst = parseFloat(document.getElementById('newProdSGST').value) || 0;
             }
 
-            const rateQuantity = qty * rate;
             const taxPer = taxType === 'N/A' ? 0 : (taxType === 'IGST' ? igst : (cgst + sgst));
             const taxAmount = rateQuantity * (taxPer / 100);
             const total = rateQuantity + taxAmount;
@@ -1791,6 +1865,10 @@
                 name: name,
                 hsncode: hsn,
                 quantity: qty,
+                length: length,
+                breadth: breadth,
+                sqft: sqft,
+                totalSqft: totalSqft,
                 rate: rate,
                 taxType: taxType,
                 cgstPer: cgst,
@@ -1811,7 +1889,9 @@
             document.getElementById('newProdName').value = '';
             document.getElementById('newProdHSN').value = '';
             document.getElementById('newProdQty').value = '1';
-            document.getElementById('newProdRate').value = '0';
+            if (document.getElementById('newProdLength')) document.getElementById('newProdLength').value = '10';
+            if (document.getElementById('newProdBreadth')) document.getElementById('newProdBreadth').value = '20';
+            document.getElementById('newProdRate').value = '1000';
             calculateNewProdPreview();
 
             showToast('Item added to invoice!');
@@ -1853,11 +1933,49 @@
             const mobileList = document.getElementById('mobileItemsList');
             const noItemsState = document.getElementById('noItemsState');
             const desktopWrapper = document.getElementById('desktopTableWrapper');
+            const desktopHead = document.getElementById('desktopTableHead');
 
             const count = products.length;
-            document.getElementById('tabItemCount').innerText = count;
-            document.getElementById('itemsListCount').innerText = count;
-            document.getElementById('mobileItemCount').innerText = count;
+            const tabItemCountEl = document.getElementById('tabItemCount');
+            if (tabItemCountEl) tabItemCountEl.innerText = count;
+            const itemsListCountEl = document.getElementById('itemsListCount');
+            if (itemsListCountEl) itemsListCountEl.innerText = count;
+
+            const isSqft = (invoiceMeta.itemFlavor === 'SQFT');
+
+            // Render Desktop Table Headers
+            if (desktopHead) {
+                if (isSqft) {
+                    desktopHead.innerHTML = `
+                        <tr>
+                            <th style="width: 35px;">#</th>
+                            <th>Description</th>
+                            <th style="width: 80px;">HSN</th>
+                            <th style="width: 60px;">Qty</th>
+                            <th style="width: 85px;">Sq.ft.</th>
+                            <th style="width: 80px;">T.Sq.ft</th>
+                            <th style="width: 90px;">Rate</th>
+                            <th style="width: 90px;">Tax</th>
+                            <th style="width: 110px;">Total (₹)</th>
+                            <th style="width: 80px; text-align: right;">Action</th>
+                        </tr>
+                    `;
+                } else {
+                    desktopHead.innerHTML = `
+                        <tr>
+                            <th style="width: 45px;">#</th>
+                            <th>Description</th>
+                            <th style="width: 90px;">HSN</th>
+                            <th style="width: 70px;">Qty</th>
+                            <th style="width: 95px;">Rate</th>
+                            <th style="width: 100px;">Basic</th>
+                            <th style="width: 100px;">Tax</th>
+                            <th style="width: 110px;">Total (₹)</th>
+                            <th style="width: 80px; text-align: right;">Action</th>
+                        </tr>
+                    `;
+                }
+            }
 
             if (count === 0) {
                 noItemsState.style.display = 'block';
@@ -1871,69 +1989,106 @@
             desktopWrapper.style.display = 'block';
 
             // Render Desktop Table Rows
-            tableBody.innerHTML = products.map((item, idx) => `
-                <tr>
-                    <td class="input-mono">${item.no}</td>
-                    <td><strong>${escapeHtml(item.name)}</strong></td>
-                    <td class="input-mono">${escapeHtml(item.hsncode || '-')}</td>
-                    <td class="input-mono">${item.quantity}</td>
-                    <td class="input-mono">${formatCurrency(item.rate)}</td>
-                    <td class="input-mono">${formatCurrency(item.rateQuantity)}</td>
-                    <td class="input-mono">
-                        ${item.taxType === 'N/A' 
-                            ? 'N/A' 
-                            : (item.taxType === 'IGST' 
-                                ? `IGST (${item.igstPer}%)` 
-                                : `C:${item.cgstPer}% S:${item.sgstPer}%`)}
-                    </td>
-                    <td class="input-mono" style="font-weight: 700; color: var(--primary);">
-                        ${formatCurrency(item.total)}
-                    </td>
-                    <td style="text-align: right;">
-                        <div style="display: inline-flex; gap: 0.35rem;">
-                            <button class="btn btn-secondary btn-icon-only btn-sm" onclick="duplicateProduct(${idx})" title="Duplicate">
-                                <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
-                            </button>
-                            <button class="btn btn-danger btn-icon-only btn-sm" onclick="removeProduct(${idx})" title="Remove">
-                                <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+            tableBody.innerHTML = products.map((item, idx) => {
+                const taxLabel = item.taxType === 'N/A' 
+                    ? 'N/A' 
+                    : (item.taxType === 'IGST' 
+                        ? `IGST (${item.igstPer}%)` 
+                        : `C:${item.cgstPer}% S:${item.sgstPer}%`);
+
+                if (isSqft) {
+                    return `
+                        <tr>
+                            <td class="input-mono">${item.no}</td>
+                            <td><strong>${escapeHtml(item.name)}</strong></td>
+                            <td class="input-mono">${escapeHtml(item.hsncode || '-')}</td>
+                            <td class="input-mono">${item.quantity}</td>
+                            <td class="input-mono">${escapeHtml(item.sqft || (item.length + '*' + item.breadth))}</td>
+                            <td class="input-mono" style="font-weight: 600;">${item.totalSqft ? Number(item.totalSqft).toFixed(2) : '-'}</td>
+                            <td class="input-mono">${formatCurrency(item.rate)}</td>
+                            <td class="input-mono">${taxLabel}</td>
+                            <td class="input-mono" style="font-weight: 700; color: var(--primary);">
+                                ${formatCurrency(item.total)}
+                            </td>
+                            <td style="text-align: right;">
+                                <div style="display: inline-flex; gap: 0.35rem;">
+                                    <button class="btn btn-secondary btn-icon-only btn-sm" onclick="duplicateProduct(${idx})" title="Duplicate">
+                                        <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-icon-only btn-sm" onclick="removeProduct(${idx})" title="Remove">
+                                        <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    return `
+                        <tr>
+                            <td class="input-mono">${item.no}</td>
+                            <td><strong>${escapeHtml(item.name)}</strong></td>
+                            <td class="input-mono">${escapeHtml(item.hsncode || '-')}</td>
+                            <td class="input-mono">${item.quantity}</td>
+                            <td class="input-mono">${formatCurrency(item.rate)}</td>
+                            <td class="input-mono">${formatCurrency(item.rateQuantity)}</td>
+                            <td class="input-mono">${taxLabel}</td>
+                            <td class="input-mono" style="font-weight: 700; color: var(--primary);">
+                                ${formatCurrency(item.total)}
+                            </td>
+                            <td style="text-align: right;">
+                                <div style="display: inline-flex; gap: 0.35rem;">
+                                    <button class="btn btn-secondary btn-icon-only btn-sm" onclick="duplicateProduct(${idx})" title="Duplicate">
+                                        <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-icon-only btn-sm" onclick="removeProduct(${idx})" title="Remove">
+                                        <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }).join('');
 
             // Render Mobile Cards
-            mobileList.innerHTML = products.map((item, idx) => `
-                <div class="mobile-item-card">
-                    <div class="mobile-card-header">
-                        <span class="item-badge">#${item.no}</span>
-                        <div style="display: flex; gap: 0.35rem;">
-                            <button class="btn btn-secondary btn-sm" onclick="duplicateProduct(${idx})">
-                                <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
-                            </button>
-                            <button class="btn btn-danger btn-sm" onclick="removeProduct(${idx})">
-                                <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
-                            </button>
+            mobileList.innerHTML = products.map((item, idx) => {
+                const taxLabel = item.taxType === 'N/A' 
+                    ? 'N/A' 
+                    : `${item.taxType === 'IGST' ? `IGST ${item.igstPer}%` : `GST ${item.cgstPer * 2}%`} (${formatCurrency(item.taxAmount)})`;
+
+                return `
+                    <div class="mobile-item-card">
+                        <div class="mobile-card-header">
+                            <span class="item-badge">#${item.no}</span>
+                            <div style="display: flex; gap: 0.35rem;">
+                                <button class="btn btn-secondary btn-sm" onclick="duplicateProduct(${idx})">
+                                    <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="removeProduct(${idx})">
+                                    <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.35rem;">${escapeHtml(item.name)}</div>
+                        <div style="display: grid; grid-template-columns: repeat(${isSqft ? '2' : '3'}, 1fr); gap: 0.4rem; font-size: 0.78rem; color: var(--text-muted);">
+                            <div>HSN: <strong class="input-mono" style="color: var(--text-main);">${escapeHtml(item.hsncode || '-')}</strong></div>
+                            <div>Qty: <strong class="input-mono" style="color: var(--text-main);">${item.quantity}</strong></div>
+                            ${isSqft ? `<div>Sq.ft: <strong class="input-mono" style="color: var(--text-main);">${escapeHtml(item.sqft || (item.length + '*' + item.breadth))}</strong></div>` : ''}
+                            ${isSqft ? `<div>T.Sq.ft: <strong class="input-mono" style="color: var(--text-main);">${item.totalSqft ? Number(item.totalSqft).toFixed(2) : '-'}</strong></div>` : ''}
+                            <div>Rate: <strong class="input-mono" style="color: var(--text-main);">${formatCurrency(item.rate)}</strong></div>
+                            ${!isSqft ? `<div>Basic: <strong class="input-mono" style="color: var(--text-main);">${formatCurrency(item.rateQuantity)}</strong></div>` : ''}
+                        </div>
+                        <div class="mobile-card-totals">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">
+                                Tax: ${taxLabel}
+                            </span>
+                            <span style="color: var(--primary); font-family: 'JetBrains Mono', monospace;">
+                                ${formatCurrency(item.total)}
+                            </span>
                         </div>
                     </div>
-                    <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.35rem;">${escapeHtml(item.name)}</div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; font-size: 0.78rem; color: var(--text-muted);">
-                        <div>HSN: <strong class="input-mono" style="color: var(--text-main);">${escapeHtml(item.hsncode || '-')}</strong></div>
-                        <div>Qty: <strong class="input-mono" style="color: var(--text-main);">${item.quantity}</strong></div>
-                        <div>Rate: <strong class="input-mono" style="color: var(--text-main);">${formatCurrency(item.rate)}</strong></div>
-                    </div>
-                    <div class="mobile-card-totals">
-                        <span style="font-size: 0.8rem; color: var(--text-muted);">
-                            Tax: ${item.taxType === 'N/A' 
-                                ? 'N/A' 
-                                : `${item.taxType === 'IGST' ? `IGST ${item.igstPer}%` : `GST ${item.cgstPer * 2}%`} (${formatCurrency(item.taxAmount)})`}
-                        </span>
-                        <span style="color: var(--primary); font-family: 'JetBrains Mono', monospace;">
-                            ${formatCurrency(item.total)}
-                        </span>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             lucide.createIcons();
         }
@@ -1964,8 +2119,11 @@
             const totalTax = cgstTotal + sgstTotal + igstTotal;
             grandTotal = basicTotal + totalTax + roundOffVal;
 
-            document.getElementById('subtotalDisplay').innerText = formatCurrency(basicTotal);
-            document.getElementById('mobileGrandTotal').innerText = formatCurrency(grandTotal);
+            const subtotalEl = document.getElementById('subtotalDisplay');
+            if (subtotalEl) subtotalEl.innerText = formatCurrency(basicTotal);
+
+            const itemsHeaderGtEl = document.getElementById('itemsHeaderGrandTotal');
+            if (itemsHeaderGtEl) itemsHeaderGtEl.innerText = formatCurrency(grandTotal);
 
             return {
                 basicTotal,
@@ -2045,65 +2203,216 @@
 
             // Table in Preview (Utilize full A4 space by padding empty rows when items are few)
             const prevBody = document.getElementById('prevTableBody');
+            const prevHead = document.getElementById('prevTableHead');
+            const isSqft = (invoiceMeta.itemFlavor === 'SQFT');
+            const isNoTax = (invoiceMeta.taxType === 'N/A');
             const TARGET_MIN_ROWS = 8;
             let rowsHtml = '';
 
+            if (prevHead) {
+                if (isSqft) {
+                    if (isNoTax) {
+                        prevHead.innerHTML = `
+                            <tr>
+                                <th style="width: 25px;">#</th>
+                                <th>Description</th>
+                                <th style="width: 45px;">HSN</th>
+                                <th style="width: 30px;">Qty</th>
+                                <th style="width: 50px;">Sq.ft.</th>
+                                <th style="width: 48px;">T.Sq.ft</th>
+                                <th style="width: 55px;">Rate</th>
+                                <th style="width: 70px; text-align: right;">Amount</th>
+                            </tr>
+                        `;
+                    } else {
+                        prevHead.innerHTML = `
+                            <tr>
+                                <th style="width: 22px;">#</th>
+                                <th>Description</th>
+                                <th style="width: 42px;">HSN</th>
+                                <th style="width: 28px;">Qty</th>
+                                <th style="width: 48px;">Sq.ft.</th>
+                                <th style="width: 45px;">T.Sq.ft</th>
+                                <th style="width: 48px;">Rate</th>
+                                <th style="width: 52px;">Tax</th>
+                                <th style="width: 65px; text-align: right;">Amount</th>
+                            </tr>
+                        `;
+                    }
+                } else {
+                    if (isNoTax) {
+                        prevHead.innerHTML = `
+                            <tr>
+                                <th style="width: 25px;">#</th>
+                                <th>Description</th>
+                                <th style="width: 55px;">HSN</th>
+                                <th style="width: 40px;">Qty</th>
+                                <th style="width: 65px;">Rate</th>
+                                <th style="width: 75px; text-align: right;">Amount</th>
+                            </tr>
+                        `;
+                    } else {
+                        prevHead.innerHTML = `
+                            <tr>
+                                <th style="width: 25px;">#</th>
+                                <th>Description</th>
+                                <th style="width: 45px;">HSN</th>
+                                <th style="width: 35px;">Qty</th>
+                                <th style="width: 50px;">Rate</th>
+                                <th style="width: 55px;">Basic</th>
+                                <th style="width: 60px;">Tax</th>
+                                <th style="width: 65px; text-align: right;">Amount</th>
+                            </tr>
+                        `;
+                    }
+                }
+            }
+
             if (products.length === 0) {
                 for (let i = 0; i < TARGET_MIN_ROWS; i++) {
-                    rowsHtml += `
-                        <tr style="height: 24px;">
-                            <td class="input-mono" style="color: #cbd5e1; text-align: center;">${i + 1}</td>
-                            <td style="color: #94a3b8;">${i === 0 ? '<em>No items added yet</em>' : '&nbsp;'}</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    `;
+                    if (isSqft) {
+                        rowsHtml += `
+                            <tr style="height: 24px;">
+                                <td class="input-mono" style="color: #cbd5e1; text-align: center;">${i + 1}</td>
+                                <td style="color: #94a3b8;">${i === 0 ? '<em>No items added yet</em>' : '&nbsp;'}</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                ${isNoTax ? '' : '<td>&nbsp;</td>'}
+                                <td>&nbsp;</td>
+                            </tr>
+                        `;
+                    } else {
+                        rowsHtml += `
+                            <tr style="height: 24px;">
+                                <td class="input-mono" style="color: #cbd5e1; text-align: center;">${i + 1}</td>
+                                <td style="color: #94a3b8;">${i === 0 ? '<em>No items added yet</em>' : '&nbsp;'}</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                ${isNoTax ? '' : '<td>&nbsp;</td><td>&nbsp;</td>'}
+                                <td>&nbsp;</td>
+                            </tr>
+                        `;
+                    }
                 }
             } else {
-                rowsHtml = products.map(item => `
-                    <tr>
-                        <td class="input-mono">${item.no}</td>
-                        <td>${escapeHtml(item.name)}</td>
-                        <td class="input-mono">${escapeHtml(item.hsncode || '-')}</td>
-                        <td class="input-mono">${item.quantity}</td>
-                        <td class="input-mono">${item.rate.toFixed(2)}</td>
-                        <td class="input-mono">${item.rateQuantity.toFixed(2)}</td>
-                        <td class="input-mono" style="font-size: 0.68rem;">
-                            ${item.taxType === 'N/A' 
-                                ? 'N/A' 
-                                : (item.taxType === 'IGST' 
-                                    ? `IGST ${item.igstPer}%` 
-                                    : `C:${item.cgstPer}% S:${item.sgstPer}%`)}
-                        </td>
-                        <td class="input-mono" style="text-align: right; font-weight: 700;">${item.total.toFixed(2)}</td>
-                    </tr>
-                `).join('');
+                rowsHtml = products.map(item => {
+                    const taxText = item.taxType === 'N/A' 
+                        ? 'N/A' 
+                        : (item.taxType === 'IGST' 
+                            ? `IGST ${item.igstPer}%` 
+                            : `C:${item.cgstPer}% S:${item.sgstPer}%`);
 
-                // If line items are fewer than TARGET_MIN_ROWS, add empty line items to fill the A4 height
+                    if (isSqft) {
+                        if (isNoTax) {
+                            return `
+                                <tr>
+                                    <td class="input-mono">${item.no}</td>
+                                    <td>${escapeHtml(item.name)}</td>
+                                    <td class="input-mono">${escapeHtml(item.hsncode || '-')}</td>
+                                    <td class="input-mono">${item.quantity}</td>
+                                    <td class="input-mono">${escapeHtml(item.sqft || (item.length + '*' + item.breadth))}</td>
+                                    <td class="input-mono" style="font-weight: 600;">${item.totalSqft ? Number(item.totalSqft).toFixed(2) : '-'}</td>
+                                    <td class="input-mono">${item.rate.toFixed(2)}</td>
+                                    <td class="input-mono" style="text-align: right; font-weight: 700;">${item.total.toFixed(2)}</td>
+                                </tr>
+                            `;
+                        } else {
+                            return `
+                                <tr>
+                                    <td class="input-mono">${item.no}</td>
+                                    <td>${escapeHtml(item.name)}</td>
+                                    <td class="input-mono">${escapeHtml(item.hsncode || '-')}</td>
+                                    <td class="input-mono">${item.quantity}</td>
+                                    <td class="input-mono">${escapeHtml(item.sqft || (item.length + '*' + item.breadth))}</td>
+                                    <td class="input-mono" style="font-weight: 600;">${item.totalSqft ? Number(item.totalSqft).toFixed(2) : '-'}</td>
+                                    <td class="input-mono">${item.rate.toFixed(2)}</td>
+                                    <td class="input-mono" style="font-size: 0.65rem;">${taxText}</td>
+                                    <td class="input-mono" style="text-align: right; font-weight: 700;">${item.total.toFixed(2)}</td>
+                                </tr>
+                            `;
+                        }
+                    } else {
+                        if (isNoTax) {
+                            return `
+                                <tr>
+                                    <td class="input-mono">${item.no}</td>
+                                    <td>${escapeHtml(item.name)}</td>
+                                    <td class="input-mono">${escapeHtml(item.hsncode || '-')}</td>
+                                    <td class="input-mono">${item.quantity}</td>
+                                    <td class="input-mono">${item.rate.toFixed(2)}</td>
+                                    <td class="input-mono" style="text-align: right; font-weight: 700;">${item.total.toFixed(2)}</td>
+                                </tr>
+                            `;
+                        } else {
+                            return `
+                                <tr>
+                                    <td class="input-mono">${item.no}</td>
+                                    <td>${escapeHtml(item.name)}</td>
+                                    <td class="input-mono">${escapeHtml(item.hsncode || '-')}</td>
+                                    <td class="input-mono">${item.quantity}</td>
+                                    <td class="input-mono">${item.rate.toFixed(2)}</td>
+                                    <td class="input-mono">${item.rateQuantity.toFixed(2)}</td>
+                                    <td class="input-mono" style="font-size: 0.68rem;">${taxText}</td>
+                                    <td class="input-mono" style="text-align: right; font-weight: 700;">${item.total.toFixed(2)}</td>
+                                </tr>
+                            `;
+                        }
+                    }
+                }).join('');
+
                 const emptyRowsNeeded = Math.max(0, TARGET_MIN_ROWS - products.length);
                 for (let i = 0; i < emptyRowsNeeded; i++) {
-                    rowsHtml += `
-                        <tr style="height: 24px;">
-                            <td class="input-mono" style="color: #cbd5e1; text-align: center;">${products.length + i + 1}</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    `;
+                    if (isSqft) {
+                        rowsHtml += `
+                            <tr style="height: 24px;">
+                                <td class="input-mono" style="color: #cbd5e1; text-align: center;">${products.length + i + 1}</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                ${isNoTax ? '' : '<td>&nbsp;</td>'}
+                                <td>&nbsp;</td>
+                            </tr>
+                        `;
+                    } else {
+                        rowsHtml += `
+                            <tr style="height: 24px;">
+                                <td class="input-mono" style="color: #cbd5e1; text-align: center;">${products.length + i + 1}</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                ${isNoTax ? '' : '<td>&nbsp;</td><td>&nbsp;</td>'}
+                                <td>&nbsp;</td>
+                            </tr>
+                        `;
+                    }
                 }
             }
             prevBody.innerHTML = rowsHtml;
 
             // Totals
             const totals = updateTotals();
+            const prevTaxRow = document.getElementById('prevTaxRow');
+            const prevSubtotalLabel = document.getElementById('prevSubtotalLabel');
+            const prevTaxLabel = document.getElementById('prevTaxLabel');
+
+            if (isNoTax) {
+                if (prevTaxRow) prevTaxRow.style.display = 'none';
+                if (prevSubtotalLabel) prevSubtotalLabel.innerText = 'Total Amount:';
+            } else {
+                if (prevTaxRow) prevTaxRow.style.display = 'flex';
+                if (prevSubtotalLabel) prevSubtotalLabel.innerText = 'Subtotal (Taxable):';
+                if (prevTaxLabel) {
+                    prevTaxLabel.innerText = (activeTaxType === 'IGST') ? 'Total Tax (IGST):' : 'Total Taxes (CGST + SGST):';
+                }
+            }
             document.getElementById('prevSubtotal').innerText = formatCurrency(totals.basicTotal);
             document.getElementById('prevTotalTax').innerText = formatCurrency(totals.totalTax);
             document.getElementById('prevRoundOff').innerText = formatCurrency(totals.roundOffVal);
@@ -2128,19 +2437,59 @@
 
             const totals = updateTotals();
 
+            const isSqft = (invoiceMeta.itemFlavor === 'SQFT');
+            const isNoTax = (invoiceMeta.taxType === 'N/A');
+
             // Construct formatted table rows for pdfMake
-            const pdfTableBody = [
-                [
-                    { text: 'Sr.', bold: true, style: 'tableHeader', alignment: 'center' },
-                    { text: 'Description of Goods / Services', bold: true, style: 'tableHeader' },
-                    { text: 'HSN/SAC', bold: true, style: 'tableHeader', alignment: 'center' },
-                    { text: 'Qty', bold: true, style: 'tableHeader', alignment: 'center' },
-                    { text: 'Rate (₹)', bold: true, style: 'tableHeader', alignment: 'right' },
-                    { text: 'Basic Amount (₹)', bold: true, style: 'tableHeader', alignment: 'right' },
-                    { text: 'Tax Rate', bold: true, style: 'tableHeader', alignment: 'center' },
-                    { text: 'Total (₹)', bold: true, style: 'tableHeader', alignment: 'right' }
-                ]
-            ];
+            let pdfTableBody = [];
+            if (isSqft) {
+                if (isNoTax) {
+                    pdfTableBody.push([
+                        { text: 'Sr.', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Description of Goods / Services', bold: true, style: 'tableHeader' },
+                        { text: 'HSN/SAC', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Qty', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Sq.ft.', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'T.Sq.ft', bold: true, style: 'tableHeader', alignment: 'right' },
+                        { text: 'Rate (₹)', bold: true, style: 'tableHeader', alignment: 'right' },
+                        { text: 'Total (₹)', bold: true, style: 'tableHeader', alignment: 'right' }
+                    ]);
+                } else {
+                    pdfTableBody.push([
+                        { text: 'Sr.', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Description of Goods / Services', bold: true, style: 'tableHeader' },
+                        { text: 'HSN/SAC', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Qty', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Sq.ft.', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'T.Sq.ft', bold: true, style: 'tableHeader', alignment: 'right' },
+                        { text: 'Rate (₹)', bold: true, style: 'tableHeader', alignment: 'right' },
+                        { text: 'Tax Rate', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Total (₹)', bold: true, style: 'tableHeader', alignment: 'right' }
+                    ]);
+                }
+            } else {
+                if (isNoTax) {
+                    pdfTableBody.push([
+                        { text: 'Sr.', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Description of Goods / Services', bold: true, style: 'tableHeader' },
+                        { text: 'HSN/SAC', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Qty', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Rate (₹)', bold: true, style: 'tableHeader', alignment: 'right' },
+                        { text: 'Total (₹)', bold: true, style: 'tableHeader', alignment: 'right' }
+                    ]);
+                } else {
+                    pdfTableBody.push([
+                        { text: 'Sr.', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Description of Goods / Services', bold: true, style: 'tableHeader' },
+                        { text: 'HSN/SAC', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Qty', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Rate (₹)', bold: true, style: 'tableHeader', alignment: 'right' },
+                        { text: 'Basic Amount (₹)', bold: true, style: 'tableHeader', alignment: 'right' },
+                        { text: 'Tax Rate', bold: true, style: 'tableHeader', alignment: 'center' },
+                        { text: 'Total (₹)', bold: true, style: 'tableHeader', alignment: 'right' }
+                    ]);
+                }
+            }
 
             // Add real product rows
             products.forEach(item => {
@@ -2150,16 +2499,54 @@
                         ? `IGST (${item.igstPer}%)` 
                         : `CGST ${item.cgstPer}%\nSGST ${item.sgstPer}%`);
 
-                pdfTableBody.push([
-                    { text: item.no.toString(), alignment: 'center' },
-                    { text: item.name },
-                    { text: item.hsncode || '-', alignment: 'center' },
-                    { text: item.quantity.toString(), alignment: 'center' },
-                    { text: item.rate.toFixed(2), alignment: 'right' },
-                    { text: item.rateQuantity.toFixed(2), alignment: 'right' },
-                    { text: taxDesc, alignment: 'center', fontSize: 8 },
-                    { text: item.total.toFixed(2), alignment: 'right', bold: true }
-                ]);
+                if (isSqft) {
+                    if (isNoTax) {
+                        pdfTableBody.push([
+                            { text: item.no.toString(), alignment: 'center' },
+                            { text: item.name },
+                            { text: item.hsncode || '-', alignment: 'center' },
+                            { text: item.quantity.toString(), alignment: 'center' },
+                            { text: (item.sqft || (item.length + '*' + item.breadth)).toString(), alignment: 'center' },
+                            { text: (item.totalSqft ? Number(item.totalSqft).toFixed(2) : '-'), alignment: 'right' },
+                            { text: item.rate.toFixed(2), alignment: 'right' },
+                            { text: item.total.toFixed(2), alignment: 'right', bold: true }
+                        ]);
+                    } else {
+                        pdfTableBody.push([
+                            { text: item.no.toString(), alignment: 'center' },
+                            { text: item.name },
+                            { text: item.hsncode || '-', alignment: 'center' },
+                            { text: item.quantity.toString(), alignment: 'center' },
+                            { text: (item.sqft || (item.length + '*' + item.breadth)).toString(), alignment: 'center' },
+                            { text: (item.totalSqft ? Number(item.totalSqft).toFixed(2) : '-'), alignment: 'right' },
+                            { text: item.rate.toFixed(2), alignment: 'right' },
+                            { text: taxDesc, alignment: 'center', fontSize: 7.5 },
+                            { text: item.total.toFixed(2), alignment: 'right', bold: true }
+                        ]);
+                    }
+                } else {
+                    if (isNoTax) {
+                        pdfTableBody.push([
+                            { text: item.no.toString(), alignment: 'center' },
+                            { text: item.name },
+                            { text: item.hsncode || '-', alignment: 'center' },
+                            { text: item.quantity.toString(), alignment: 'center' },
+                            { text: item.rate.toFixed(2), alignment: 'right' },
+                            { text: item.total.toFixed(2), alignment: 'right', bold: true }
+                        ]);
+                    } else {
+                        pdfTableBody.push([
+                            { text: item.no.toString(), alignment: 'center' },
+                            { text: item.name },
+                            { text: item.hsncode || '-', alignment: 'center' },
+                            { text: item.quantity.toString(), alignment: 'center' },
+                            { text: item.rate.toFixed(2), alignment: 'right' },
+                            { text: item.rateQuantity.toFixed(2), alignment: 'right' },
+                            { text: taxDesc, alignment: 'center', fontSize: 8 },
+                            { text: item.total.toFixed(2), alignment: 'right', bold: true }
+                        ]);
+                    }
+                }
             });
 
             // If line items are fewer than TARGET_MIN_ROWS (8), pad with empty rows to utilize full A4 page
@@ -2167,40 +2554,156 @@
             const emptyRowsNeeded = Math.max(0, TARGET_PDF_ROWS - products.length);
 
             for (let i = 0; i < emptyRowsNeeded; i++) {
-                pdfTableBody.push([
-                    { text: (products.length + i + 1).toString(), alignment: 'center', color: '#cbd5e1', fontSize: 8 },
-                    { text: ' ' },
-                    { text: ' ', alignment: 'center' },
-                    { text: ' ', alignment: 'center' },
-                    { text: ' ', alignment: 'right' },
-                    { text: ' ', alignment: 'right' },
-                    { text: ' ', alignment: 'center' },
-                    { text: ' ', alignment: 'right' }
-                ]);
+                if (isSqft) {
+                    if (isNoTax) {
+                        pdfTableBody.push([
+                            { text: (products.length + i + 1).toString(), alignment: 'center', color: '#cbd5e1', fontSize: 8 },
+                            { text: ' ' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'right' },
+                            { text: ' ', alignment: 'right' },
+                            { text: ' ', alignment: 'right' }
+                        ]);
+                    } else {
+                        pdfTableBody.push([
+                            { text: (products.length + i + 1).toString(), alignment: 'center', color: '#cbd5e1', fontSize: 8 },
+                            { text: ' ' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'right' },
+                            { text: ' ', alignment: 'right' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'right' }
+                        ]);
+                    }
+                } else {
+                    if (isNoTax) {
+                        pdfTableBody.push([
+                            { text: (products.length + i + 1).toString(), alignment: 'center', color: '#cbd5e1', fontSize: 8 },
+                            { text: ' ' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'right' },
+                            { text: ' ', alignment: 'right' }
+                        ]);
+                    } else {
+                        pdfTableBody.push([
+                            { text: (products.length + i + 1).toString(), alignment: 'center', color: '#cbd5e1', fontSize: 8 },
+                            { text: ' ' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'right' },
+                            { text: ' ', alignment: 'right' },
+                            { text: ' ', alignment: 'center' },
+                            { text: ' ', alignment: 'right' }
+                        ]);
+                    }
+                }
             }
 
             // Summary Rows
-            pdfTableBody.push([
-                { text: 'Total Taxable Amount', colSpan: 5, alignment: 'right', bold: true },
-                {}, {}, {}, {},
-                { text: totals.basicTotal.toFixed(2), alignment: 'right', bold: true },
-                { text: 'Tax: ' + totals.totalTax.toFixed(2), alignment: 'center', fontSize: 8 },
-                { text: (totals.basicTotal + totals.totalTax).toFixed(2), alignment: 'right', bold: true }
-            ]);
+            if (isSqft) {
+                if (isNoTax) {
+                    pdfTableBody.push([
+                        { text: 'Total Amount', colSpan: 6, alignment: 'right', bold: true },
+                        {}, {}, {}, {}, {},
+                        { text: totals.basicTotal.toFixed(2), colSpan: 2, alignment: 'right', bold: true },
+                        {}
+                    ]);
 
-            if (totals.roundOffVal !== 0) {
-                pdfTableBody.push([
-                    { text: 'Round Off Adjustment', colSpan: 7, alignment: 'right' },
-                    {}, {}, {}, {}, {}, {},
-                    { text: totals.roundOffVal.toFixed(2), alignment: 'right' }
-                ]);
+                    if (totals.roundOffVal !== 0) {
+                        pdfTableBody.push([
+                            { text: 'Round Off Adjustment', colSpan: 6, alignment: 'right' },
+                            {}, {}, {}, {}, {},
+                            { text: totals.roundOffVal.toFixed(2), colSpan: 2, alignment: 'right' },
+                            {}
+                        ]);
+                    }
+
+                    pdfTableBody.push([
+                        { text: 'Grand Total', colSpan: 6, alignment: 'right', bold: true, fontSize: 10 },
+                        {}, {}, {}, {}, {},
+                        { text: '₹ ' + formatNumberIndian(totals.grandTotal), colSpan: 2, alignment: 'right', bold: true, fontSize: 10, color: '#4f46e5' },
+                        {}
+                    ]);
+                } else {
+                    pdfTableBody.push([
+                        { text: 'Total Taxable Amount', colSpan: 6, alignment: 'right', bold: true },
+                        {}, {}, {}, {}, {},
+                        { text: totals.basicTotal.toFixed(2), alignment: 'right', bold: true },
+                        { text: 'Tax: ' + totals.totalTax.toFixed(2), alignment: 'center', fontSize: 8 },
+                        { text: (totals.basicTotal + totals.totalTax).toFixed(2), alignment: 'right', bold: true }
+                    ]);
+
+                    if (totals.roundOffVal !== 0) {
+                        pdfTableBody.push([
+                            { text: 'Round Off Adjustment', colSpan: 6, alignment: 'right' },
+                            {}, {}, {}, {}, {},
+                            { text: totals.roundOffVal.toFixed(2), colSpan: 3, alignment: 'right' },
+                            {}, {}
+                        ]);
+                    }
+
+                    pdfTableBody.push([
+                        { text: 'Grand Total', colSpan: 6, alignment: 'right', bold: true, fontSize: 10 },
+                        {}, {}, {}, {}, {},
+                        { text: '₹ ' + formatNumberIndian(totals.grandTotal), colSpan: 3, alignment: 'right', bold: true, fontSize: 10, color: '#4f46e5' },
+                        {}, {}
+                    ]);
+                }
+            } else {
+                if (isNoTax) {
+                    pdfTableBody.push([
+                        { text: 'Total Amount', colSpan: 4, alignment: 'right', bold: true },
+                        {}, {}, {},
+                        { text: totals.basicTotal.toFixed(2), colSpan: 2, alignment: 'right', bold: true },
+                        {}
+                    ]);
+
+                    if (totals.roundOffVal !== 0) {
+                        pdfTableBody.push([
+                            { text: 'Round Off Adjustment', colSpan: 4, alignment: 'right' },
+                            {}, {}, {},
+                            { text: totals.roundOffVal.toFixed(2), colSpan: 2, alignment: 'right' },
+                            {}
+                        ]);
+                    }
+
+                    pdfTableBody.push([
+                        { text: 'Grand Total', colSpan: 4, alignment: 'right', bold: true, fontSize: 10 },
+                        {}, {}, {},
+                        { text: '₹ ' + formatNumberIndian(totals.grandTotal), colSpan: 2, alignment: 'right', bold: true, fontSize: 10, color: '#4f46e5' },
+                        {}
+                    ]);
+                } else {
+                    pdfTableBody.push([
+                        { text: 'Total Taxable Amount', colSpan: 5, alignment: 'right', bold: true },
+                        {}, {}, {}, {},
+                        { text: totals.basicTotal.toFixed(2), alignment: 'right', bold: true },
+                        { text: 'Tax: ' + totals.totalTax.toFixed(2), alignment: 'center', fontSize: 8 },
+                        { text: (totals.basicTotal + totals.totalTax).toFixed(2), alignment: 'right', bold: true }
+                    ]);
+
+                    if (totals.roundOffVal !== 0) {
+                        pdfTableBody.push([
+                            { text: 'Round Off Adjustment', colSpan: 5, alignment: 'right' },
+                            {}, {}, {}, {},
+                            { text: totals.roundOffVal.toFixed(2), colSpan: 3, alignment: 'right' },
+                            {}, {}
+                        ]);
+                    }
+
+                    pdfTableBody.push([
+                        { text: 'Grand Total', colSpan: 5, alignment: 'right', bold: true, fontSize: 10 },
+                        {}, {}, {}, {},
+                        { text: '₹ ' + formatNumberIndian(totals.grandTotal), colSpan: 3, alignment: 'right', bold: true, fontSize: 10, color: '#4f46e5' },
+                        {}, {}
+                    ]);
+                }
             }
-
-            pdfTableBody.push([
-                { text: 'Grand Total', colSpan: 7, alignment: 'right', bold: true, fontSize: 11 },
-                {}, {}, {}, {}, {}, {},
-                { text: '₹ ' + formatNumberIndian(totals.grandTotal), alignment: 'right', bold: true, fontSize: 11, color: '#4f46e5' }
-            ]);
 
             const sellerTaxLabel = getVal('sellerTaxType') || sellerProfile.sellerTaxType || 'GSTIN';
             const buyerTaxLabel = getVal('buyerTaxType') || buyerData.buyerTaxType || 'GSTIN';
@@ -2305,7 +2808,9 @@
                         style: 'itemsTableBlock',
                         table: {
                             headerRows: 1,
-                            widths: [20, '*', 45, 30, 48, 58, 65, 60],
+                            widths: isSqft 
+                                ? (isNoTax ? [18, '*', 42, 26, 46, 44, 52, 78] : [18, '*', 40, 25, 44, 40, 48, 50, 75])
+                                : (isNoTax ? [20, '*', 50, 30, 60, 85] : [18, '*', 45, 28, 48, 55, 58, 75]),
                             heights: function (row) {
                                 if (row === 0) return 18;
                                 // If items are fewer, give comfortable row heights to utilize the page
@@ -2403,14 +2908,27 @@
             const fileName = `${cleanType}_${cleanBuyer}_${cleanInv}.pdf`;
 
             try {
+                const generatedInvNo = getVal('invoiceNo') || invoiceMeta.invoiceNo || 'INV-001';
+
                 if (action === 'print') {
                     pdfMake.createPdf(docDefinition).print();
+                    showToast(`${billType} (#${generatedInvNo}) sent to print!`);
                 } else if (action === 'open') {
                     pdfMake.createPdf(docDefinition).open();
+                    showToast(`${billType} (#${generatedInvNo}) PDF opened!`);
                 } else {
                     pdfMake.createPdf(docDefinition).download(fileName);
-                    showToast(`${billType} PDF downloaded successfully!`);
+                    showToast(`${billType} (#${generatedInvNo}) downloaded successfully!`);
                 }
+
+                // Automatically advance and save next Invoice / Ref Number for subsequent bills
+                const nextInvNo = incrementInvoiceNumber(generatedInvNo);
+                invoiceMeta.invoiceNo = nextInvNo;
+                localStorage.setItem(INVOICE_NO_STORAGE_KEY, nextInvNo);
+                const invInput = document.getElementById('invoiceNo');
+                if (invInput) invInput.value = nextInvNo;
+                updateInvoicePreview();
+
             } catch (err) {
                 console.error(err);
                 alert('Error generating PDF: ' + err.message);
@@ -2418,121 +2936,8 @@
         }
 
         // ==========================================
-        // SAMPLE DATA & UTILITIES
+        // UTILITIES
         // ==========================================
-        function loadSampleData() {
-            sellerProfile = {
-                sellerName: 'ABC ENTERPRISE',
-                sellerAddressLine1: 'B9, Ambika Tenament,',
-                sellerAddressLine2: 'Near New Jaspark Society,',
-                sellerAddressLine3: 'Isanpur, Ahmedabad -380008,',
-                sellerTaxType: 'GSTIN',
-                sellerGSTIN: '24AKSPM8985A1ZO',
-                bank: 'State Bank of India',
-                AccountNo: '30987654321',
-                IFSCCODE: 'SBIN0001234',
-                termsOfDelivery: 'Goods once sold will not be taken back'
-            };
-            sessionStorage.setItem(SELLER_STORAGE_KEY, JSON.stringify(sellerProfile));
-
-            buyerData = {
-                buyerName: 'BIRD INK PACKAGING PVT LTD',
-                buyerAddressLine1: 'Plot 42, Phase II, GIDC Industrial Estate,',
-                buyerAddressLine2: 'Narol Highway,',
-                buyerAddressLine3: 'Ahmedabad - 382405, Gujarat',
-                buyerTaxType: 'GSTIN',
-                buyerGSTIN: '24AABCB9876C1Z2'
-            };
-
-            invoiceMeta = {
-                billType: 'TAX INVOICE',
-                invoiceNo: 'GST/2026/089',
-                invoiceDate: new Date().toISOString().split('T')[0],
-                deliveryNote: 'DN-8842',
-                modeTermsOfPayment: '30 Days Net',
-                suppliersRef: 'SR-102',
-                otherRef: 'PO Ref 4410',
-                buyersOrderNo: 'PO-2026-90',
-                buyersOrderNoDated: new Date().toISOString().split('T')[0],
-                dispatchDocNo: 'LR-99231',
-                dispatchDocNoDated: new Date().toISOString().split('T')[0],
-                dispatchedThrough: 'V-Trans Logistics',
-                destination: 'Narol Plant',
-                termsOfDelivery: 'Door Delivery'
-            };
-
-            products = [
-                {
-                    no: 1,
-                    name: 'Offset Printing Ink - Cyan Special (5 Kg)',
-                    hsncode: '3215',
-                    quantity: 4,
-                    rate: 850,
-                    taxType: 'GST',
-                    cgstPer: 9,
-                    sgstPer: 9,
-                    igstPer: 0,
-                    rateQuantity: 3400,
-                    taxAmount: 612,
-                    total: 4012
-                },
-                {
-                    no: 2,
-                    name: 'UV Coating Gloss Varnish (20 Litre Drum)',
-                    hsncode: '3208',
-                    quantity: 2,
-                    rate: 4200,
-                    taxType: 'GST',
-                    cgstPer: 9,
-                    sgstPer: 9,
-                    igstPer: 0,
-                    rateQuantity: 8400,
-                    taxAmount: 1512,
-                    total: 9912
-                },
-                {
-                    no: 3,
-                    name: 'Packaging & Wooden Pallet Charge',
-                    hsncode: '9985',
-                    quantity: 1,
-                    rate: 500,
-                    taxType: 'GST',
-                    cgstPer: 9,
-                    sgstPer: 9,
-                    igstPer: 0,
-                    rateQuantity: 500,
-                    taxAmount: 90,
-                    total: 590
-                }
-            ];
-
-            populateFormFields();
-            renderProducts();
-            updateTotals();
-            updateInvoicePreview();
-            showToast('Sample invoice data loaded!');
-        }
-
-        function resetForm() {
-            if (confirm('Reset entire invoice form?')) {
-                buyerData = { buyerName: '', buyerAddressLine1: '', buyerAddressLine2: '', buyerAddressLine3: '', buyerTaxType: 'GSTIN', buyerGSTIN: '' };
-                invoiceMeta = {
-                    billType: 'TAX INVOICE',
-                    invoiceNo: 'GST/' + new Date().getFullYear() + '/001',
-                    invoiceDate: new Date().toISOString().split('T')[0],
-                    deliveryNote: '', modeTermsOfPayment: '', suppliersRef: '', otherRef: '',
-                    buyersOrderNo: '', buyersOrderNoDated: '', dispatchDocNo: '', dispatchDocNoDated: '',
-                    dispatchedThrough: '', destination: '', termsOfDelivery: ''
-                };
-                products = [];
-                roundOff = 0;
-                populateFormFields();
-                renderProducts();
-                updateTotals();
-                updateInvoicePreview();
-                showToast('Form reset');
-            }
-        }
 
         // Format Indian Number System (Lakhs & Crores)
         function formatNumberIndian(num) {
