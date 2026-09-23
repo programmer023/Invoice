@@ -474,6 +474,47 @@
             font-size: 0.9rem;
         }
 
+        /* Catalog Suggestion Chips with Delete Button */
+        .catalog-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: var(--surface-subtle);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0.2rem 0.55rem;
+            font-size: 0.74rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            color: var(--text-main);
+        }
+
+        .catalog-chip:hover {
+            border-color: var(--primary-border);
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .chip-del-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+            border-radius: 50%;
+            margin-left: 2px;
+            transition: all 0.15s ease;
+        }
+
+        .chip-del-btn:hover {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.15);
+        }
+
         /* Live Preview Document Area (A4 Proportion & Bottom Footer Alignment) */
         .preview-pane {
             position: sticky;
@@ -763,7 +804,13 @@
                                 <input type="text" id="sellerAddressLine3" class="input-control" placeholder="e.g. Ahmedabad - 380008, Gujarat" oninput="saveSellerField('sellerAddressLine3', this.value); updateInvoicePreview();">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Seller GSTIN <span class="required">*</span></label>
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.25rem;">
+                                    <label class="form-label" style="margin-bottom: 0;">Seller Tax ID Type</label>
+                                    <select id="sellerTaxType" class="select-control" style="width: auto; padding: 0.15rem 0.45rem; font-size: 0.75rem; font-weight: 700; height: 26px; border-radius: 6px;" onchange="saveSellerField('sellerTaxType', this.value); updateInvoicePreview();">
+                                        <option value="GSTIN">GSTIN</option>
+                                        <option value="PAN">PAN</option>
+                                    </select>
+                                </div>
                                 <input type="text" id="sellerGSTIN" class="input-control input-mono" placeholder="24AKSPM8985A1ZO" oninput="saveSellerField('sellerGSTIN', this.value); updateInvoicePreview();">
                             </div>
                         </div>
@@ -851,7 +898,13 @@
                                 <input type="text" id="buyerAddressLine3" class="input-control" placeholder="e.g. Narol, Ahmedabad - 380008" oninput="updateInvoicePreview();">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Buyer GSTIN / UIN</label>
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.25rem;">
+                                    <label class="form-label" style="margin-bottom: 0;">Buyer Tax ID Type</label>
+                                    <select id="buyerTaxType" class="select-control" style="width: auto; padding: 0.15rem 0.45rem; font-size: 0.75rem; font-weight: 700; height: 26px; border-radius: 6px;" onchange="buyerData.buyerTaxType = this.value; updateInvoicePreview();">
+                                        <option value="GSTIN">GSTIN</option>
+                                        <option value="PAN">PAN</option>
+                                    </select>
+                                </div>
                                 <input type="text" id="buyerGSTIN" class="input-control input-mono" placeholder="24AAACB1234F1Z5" oninput="updateInvoicePreview();">
                             </div>
                         </div>
@@ -955,8 +1008,13 @@
 
                         <div class="form-grid cols-4">
                             <div class="form-group full-width" style="grid-column: span 2;">
-                                <label class="form-label">Description of Goods / Services <span class="required">*</span></label>
-                                <input type="text" id="newProdName" class="input-control" placeholder="e.g. Industrial Printing Ink - Black (5L)">
+                                <label class="form-label">
+                                    <span>Description of Goods / Services <span class="required">*</span></span>
+                                    <span style="font-size: 0.7rem; color: var(--primary); font-weight: 600;" id="catalogCountLabel"></span>
+                                </label>
+                                <input type="text" id="newProdName" class="input-control" list="savedItemSuggestions" placeholder="e.g. Industrial Printing Ink - Black (5L)" oninput="handleDescriptionInput(this.value)" autocomplete="off">
+                                <datalist id="savedItemSuggestions"></datalist>
+                                <div id="quickItemChips" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem;"></div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">HSN / SAC Code</label>
@@ -1128,7 +1186,7 @@
                                 <div id="prevSellerAddr1">B9, Ambika Tenament</div>
                                 <div id="prevSellerAddr2">Near New Jaspark Society</div>
                                 <div id="prevSellerAddr3">Isanpur, Ahmedabad - 380008</div>
-                                <div style="margin-top: 4px; font-weight: 700;">GSTIN: <span id="prevSellerGSTIN" class="input-mono">24AKSPM8985A1ZO</span></div>
+                                <div style="margin-top: 4px; font-weight: 700;"><span id="prevSellerTaxLabel">GSTIN</span>: <span id="prevSellerGSTIN" class="input-mono">24AKSPM8985A1ZO</span></div>
                             </div>
 
                             <div class="doc-box" style="font-size: 0.75rem;">
@@ -1163,7 +1221,7 @@
                                 <div id="prevBuyerAddr1">Narol</div>
                                 <div id="prevBuyerAddr2">Ahmedabad</div>
                                 <div id="prevBuyerAddr3">380008</div>
-                                <div style="margin-top: 4px; font-weight: 700;">GSTIN: <span id="prevBuyerGSTIN" class="input-mono">ABCDEF</span></div>
+                                <div style="margin-top: 4px; font-weight: 700;"><span id="prevBuyerTaxLabel">GSTIN</span>: <span id="prevBuyerGSTIN" class="input-mono">ABCDEF</span></div>
                             </div>
 
                             <div class="doc-box" style="font-size: 0.75rem;">
@@ -1291,6 +1349,9 @@
         // STATE MANAGEMENT & SESSION STORAGE
         // ==========================================
         const SELLER_STORAGE_KEY = 'GST_INVOICE_SELLER_PROFILE';
+        const CATALOG_STORAGE_KEY = 'GST_INVOICE_PRODUCTS_CATALOG';
+
+        let savedProductsCatalog = [];
 
         // Default Data Structures
         let sellerProfile = {
@@ -1298,6 +1359,7 @@
             sellerAddressLine1: 'B9, Ambika Tenament,',
             sellerAddressLine2: 'Near New Jaspark Society,',
             sellerAddressLine3: 'Isanpur, Ahmedabad -380008,',
+            sellerTaxType: 'GSTIN',
             sellerGSTIN: '24AKSPM8985A1ZO',
             bank: 'HDFC Bank Ltd',
             AccountNo: '50200012345678',
@@ -1310,6 +1372,7 @@
             buyerAddressLine1: 'Narol,',
             buyerAddressLine2: 'Ahmedabad',
             buyerAddressLine3: '380008',
+            buyerTaxType: 'GSTIN',
             buyerGSTIN: '24ABCDE1234F1Z5'
         };
 
@@ -1366,12 +1429,148 @@
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             loadSellerFromSessionOrLocal();
+            loadProductsCatalog();
             populateFormFields();
             renderProducts();
             calculateNewProdPreview();
             updateTotals();
             updateInvoicePreview();
         });
+
+        // ==========================================
+        // PRODUCTS CATALOG (SESSION STORAGE & AUTOCOMPLETE)
+        // ==========================================
+        function loadProductsCatalog() {
+            // First check sessionStorage
+            const sessionData = sessionStorage.getItem(CATALOG_STORAGE_KEY);
+            if (sessionData) {
+                try {
+                    savedProductsCatalog = JSON.parse(sessionData) || [];
+                    renderCatalogSuggestions();
+                    return;
+                } catch(e) {}
+            }
+
+            // Fallback to localStorage if available
+            const localData = localStorage.getItem(CATALOG_STORAGE_KEY);
+            if (localData) {
+                try {
+                    savedProductsCatalog = JSON.parse(localData) || [];
+                    sessionStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(savedProductsCatalog));
+                } catch(e) {}
+            }
+            renderCatalogSuggestions();
+        }
+
+        function saveProductToCatalog(item) {
+            if (!item || !item.name || !item.name.trim()) return;
+            const cleanName = item.name.trim();
+
+            const existingIndex = savedProductsCatalog.findIndex(p => p.name.toLowerCase() === cleanName.toLowerCase());
+            const catalogItem = {
+                name: cleanName,
+                hsncode: item.hsncode || '',
+                rate: item.rate || 0,
+                taxType: item.taxType || 'GST',
+                cgstPer: item.cgstPer || 9,
+                sgstPer: item.sgstPer || 9,
+                igstPer: item.igstPer || 18
+            };
+
+            if (existingIndex >= 0) {
+                // Update latest rate / hsn if modified
+                savedProductsCatalog[existingIndex] = catalogItem;
+            } else {
+                // Prepend new item
+                savedProductsCatalog.unshift(catalogItem);
+            }
+
+            // Keep top 30 items
+            if (savedProductsCatalog.length > 30) {
+                savedProductsCatalog = savedProductsCatalog.slice(0, 30);
+            }
+
+            sessionStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(savedProductsCatalog));
+            localStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(savedProductsCatalog));
+            renderCatalogSuggestions();
+        }
+
+        function renderCatalogSuggestions() {
+            const datalist = document.getElementById('savedItemSuggestions');
+            const chipsContainer = document.getElementById('quickItemChips');
+            const countLabel = document.getElementById('catalogCountLabel');
+
+            if (countLabel) {
+                countLabel.innerText = savedProductsCatalog.length > 0 
+                    ? `(${savedProductsCatalog.length} saved items)` 
+                    : '';
+            }
+
+            if (datalist) {
+                datalist.innerHTML = savedProductsCatalog.map(p => `
+                    <option value="${escapeHtml(p.name)}">${p.hsncode ? `HSN: ${escapeHtml(p.hsncode)} | ` : ''}Rate: ₹${p.rate}</option>
+                `).join('');
+            }
+
+            if (chipsContainer) {
+                if (savedProductsCatalog.length === 0) {
+                    chipsContainer.innerHTML = '';
+                } else {
+                    // Show up to 8 quick clickable chips with delete button
+                    const topItems = savedProductsCatalog.slice(0, 8);
+                    chipsContainer.innerHTML = topItems.map((p, idx) => `
+                        <span class="catalog-chip" onclick="selectSavedCatalogItem(${idx})" title="Click to auto-fill">
+                            <i data-lucide="tag" style="width: 11px; height: 11px; color: var(--primary);"></i>
+                            <span class="chip-text">${escapeHtml(p.name.length > 24 ? p.name.substring(0, 21) + '...' : p.name)}</span>
+                            <button type="button" class="chip-del-btn" onclick="event.stopPropagation(); deleteSavedCatalogItem(${idx});" title="Remove tag">
+                                <i data-lucide="x" style="width: 11px; height: 11px;"></i>
+                            </button>
+                        </span>
+                    `).join('');
+                    lucide.createIcons();
+                }
+            }
+        }
+
+        function deleteSavedCatalogItem(index) {
+            if (index >= 0 && index < savedProductsCatalog.length) {
+                const removed = savedProductsCatalog.splice(index, 1);
+                sessionStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(savedProductsCatalog));
+                localStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(savedProductsCatalog));
+                renderCatalogSuggestions();
+                if (removed.length > 0) {
+                    showToast(`Deleted "${removed[0].name}" tag`);
+                }
+            }
+        }
+
+        function selectSavedCatalogItem(index) {
+            const item = savedProductsCatalog[index];
+            if (!item) return;
+            document.getElementById('newProdName').value = item.name;
+            handleDescriptionInput(item.name);
+            showToast(`Loaded "${item.name}"`);
+        }
+
+        function handleDescriptionInput(val) {
+            if (!val || !val.trim()) return;
+            const matched = savedProductsCatalog.find(p => p.name.toLowerCase() === val.trim().toLowerCase());
+            if (matched) {
+                if (matched.hsncode) document.getElementById('newProdHSN').value = matched.hsncode;
+                if (matched.rate !== undefined) document.getElementById('newProdRate').value = matched.rate;
+                if (matched.taxType) {
+                    document.getElementById('newProdTaxType').value = matched.taxType;
+                    toggleTaxMode(matched.taxType);
+                }
+                if (matched.taxType === 'IGST') {
+                    if (matched.igstPer !== undefined) document.getElementById('newProdIGST').value = matched.igstPer;
+                } else {
+                    if (matched.cgstPer !== undefined) document.getElementById('newProdCGST').value = matched.cgstPer;
+                    if (matched.sgstPer !== undefined) document.getElementById('newProdSGST').value = matched.sgstPer;
+                }
+                calculateNewProdPreview();
+            }
+        }
 
         // ==========================================
         // PERSISTENCE ENGINE (SESSION & LOCAL STORAGE)
@@ -1429,6 +1628,7 @@
                     sellerAddressLine1: '',
                     sellerAddressLine2: '',
                     sellerAddressLine3: '',
+                    sellerTaxType: 'GSTIN',
                     sellerGSTIN: '',
                     bank: '',
                     AccountNo: '',
@@ -1578,6 +1778,7 @@
             };
 
             products.push(newItem);
+            saveProductToCatalog(newItem);
             renderProducts();
             updateTotals();
             updateInvoicePreview();
@@ -1758,6 +1959,8 @@
             };
 
             // Seller
+            const sellerTaxLabel = getVal('sellerTaxType') || sellerProfile.sellerTaxType || 'GSTIN';
+            document.getElementById('prevSellerTaxLabel').innerText = sellerTaxLabel;
             document.getElementById('prevSellerName').innerText = getVal('sellerName') || 'SELLER NAME';
             document.getElementById('prevSellerAddr1').innerText = getVal('sellerAddressLine1');
             document.getElementById('prevSellerAddr2').innerText = getVal('sellerAddressLine2');
@@ -1766,6 +1969,8 @@
             document.getElementById('prevSignatoryCompany').innerText = getVal('sellerName') || 'SELLER';
 
             // Buyer
+            const buyerTaxLabel = getVal('buyerTaxType') || buyerData.buyerTaxType || 'GSTIN';
+            document.getElementById('prevBuyerTaxLabel').innerText = buyerTaxLabel;
             document.getElementById('prevBuyerName').innerText = getVal('buyerName') || 'BUYER NAME';
             document.getElementById('prevBuyerAddr1').innerText = getVal('buyerAddressLine1');
             document.getElementById('prevBuyerAddr2').innerText = getVal('buyerAddressLine2');
@@ -1947,6 +2152,9 @@
                 { text: '₹ ' + formatNumberIndian(totals.grandTotal), alignment: 'right', bold: true, fontSize: 11, color: '#4f46e5' }
             ]);
 
+            const sellerTaxLabel = getVal('sellerTaxType') || sellerProfile.sellerTaxType || 'GSTIN';
+            const buyerTaxLabel = getVal('buyerTaxType') || buyerData.buyerTaxType || 'GSTIN';
+
             const invoiceDateFormatted = getVal('invoiceDate') ? formatDateReadable(getVal('invoiceDate')) : '';
             const orderDateFormatted = getVal('buyersOrderNoDated') ? formatDateReadable(getVal('buyersOrderNoDated')) : '';
             const dispatchDateFormatted = getVal('dispatchDocNoDated') ? formatDateReadable(getVal('dispatchDocNoDated')) : '';
@@ -1972,7 +2180,7 @@
                                             { text: getVal('sellerAddressLine1'), fontSize: 9 },
                                             { text: getVal('sellerAddressLine2'), fontSize: 9 },
                                             { text: getVal('sellerAddressLine3'), fontSize: 9 },
-                                            { text: 'GSTIN: ' + (getVal('sellerGSTIN') || '-'), bold: true, fontSize: 9, margin: [0, 4, 0, 0] }
+                                            { text: sellerTaxLabel + ': ' + (getVal('sellerGSTIN') || '-'), bold: true, fontSize: 9, margin: [0, 4, 0, 0] }
                                         ],
                                         margin: [4, 4, 4, 4]
                                     },
@@ -1998,7 +2206,7 @@
                                             { text: getVal('buyerAddressLine1'), fontSize: 9 },
                                             { text: getVal('buyerAddressLine2'), fontSize: 9 },
                                             { text: getVal('buyerAddressLine3'), fontSize: 9 },
-                                            { text: 'GSTIN / UIN: ' + (getVal('buyerGSTIN') || '-'), bold: true, fontSize: 9, margin: [0, 4, 0, 0] }
+                                            { text: buyerTaxLabel + ': ' + (getVal('buyerGSTIN') || '-'), bold: true, fontSize: 9, margin: [0, 4, 0, 0] }
                                         ],
                                         margin: [4, 4, 4, 4]
                                     },
@@ -2144,6 +2352,7 @@
                 sellerAddressLine1: 'B9, Ambika Tenament,',
                 sellerAddressLine2: 'Near New Jaspark Society,',
                 sellerAddressLine3: 'Isanpur, Ahmedabad -380008,',
+                sellerTaxType: 'GSTIN',
                 sellerGSTIN: '24AKSPM8985A1ZO',
                 bank: 'State Bank of India',
                 AccountNo: '30987654321',
@@ -2157,6 +2366,7 @@
                 buyerAddressLine1: 'Plot 42, Phase II, GIDC Industrial Estate,',
                 buyerAddressLine2: 'Narol Highway,',
                 buyerAddressLine3: 'Ahmedabad - 382405, Gujarat',
+                buyerTaxType: 'GSTIN',
                 buyerGSTIN: '24AABCB9876C1Z2'
             };
 
@@ -2230,7 +2440,7 @@
 
         function resetForm() {
             if (confirm('Reset entire invoice form?')) {
-                buyerData = { buyerName: '', buyerAddressLine1: '', buyerAddressLine2: '', buyerAddressLine3: '', buyerGSTIN: '' };
+                buyerData = { buyerName: '', buyerAddressLine1: '', buyerAddressLine2: '', buyerAddressLine3: '', buyerTaxType: 'GSTIN', buyerGSTIN: '' };
                 invoiceMeta = {
                     invoiceNo: 'GST/' + new Date().getFullYear() + '/001',
                     invoiceDate: new Date().toISOString().split('T')[0],
