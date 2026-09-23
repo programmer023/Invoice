@@ -924,7 +924,19 @@
 
                         <div class="form-grid cols-3">
                             <div class="form-group">
-                                <label class="form-label">Invoice No. <span class="required">*</span></label>
+                                <label class="form-label">Document / Bill Type <span class="required">*</span></label>
+                                <select id="billType" class="select-control" style="font-weight: 700; color: var(--primary);" onchange="updateInvoicePreview();">
+                                    <option value="TAX INVOICE" selected>TAX INVOICE</option>
+                                    <option value="ESTIMATE">ESTIMATE</option>
+                                    <option value="PROFORMA INVOICE">PROFORMA INVOICE</option>
+                                    <option value="QUOTATION">QUOTATION</option>
+                                    <option value="BILL OF SUPPLY">BILL OF SUPPLY</option>
+                                    <option value="DELIVERY CHALLAN">DELIVERY CHALLAN</option>
+                                    <option value="CASH MEMO">CASH MEMO</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Invoice / Ref No. <span class="required">*</span></label>
                                 <input type="text" id="invoiceNo" class="input-control input-mono" placeholder="GST/2026/001" oninput="updateInvoicePreview();">
                             </div>
                             <div class="form-group">
@@ -1175,8 +1187,8 @@
                 <div class="preview-document">
                     <div class="doc-body-top">
                         <div class="doc-header">
-                            <div class="doc-title">TAX INVOICE</div>
-                            <div style="font-size: 0.7rem; color: #64748b; font-weight: 600;">(Original for Recipient)</div>
+                            <div class="doc-title" id="prevDocTitle">TAX INVOICE</div>
+                            <div id="prevDocSubtitle" style="font-size: 0.7rem; color: #64748b; font-weight: 600;">(Original for Recipient)</div>
                         </div>
 
                         <!-- Seller & Invoice Info Header -->
@@ -1377,6 +1389,7 @@
         };
 
         let invoiceMeta = {
+            billType: 'TAX INVOICE',
             invoiceNo: 'GST/2026/001',
             invoiceDate: new Date().toISOString().split('T')[0],
             deliveryNote: '',
@@ -1958,6 +1971,22 @@
                 return el ? el.value.trim() : '';
             };
 
+            // Bill / Document Type & Subtitle
+            const billType = getVal('billType') || 'TAX INVOICE';
+            const billSubtitles = {
+                'TAX INVOICE': '(Original for Recipient)',
+                'ESTIMATE': '(Estimate / Quotation)',
+                'PROFORMA INVOICE': '(Proforma Invoice)',
+                'QUOTATION': '(Commercial Quotation)',
+                'BILL OF SUPPLY': '(Composition / Exempt Supply)',
+                'DELIVERY CHALLAN': '(Delivery Challan)',
+                'CASH MEMO': '(Cash Receipt / Memo)'
+            };
+            const prevDocTitleEl = document.getElementById('prevDocTitle');
+            const prevDocSubEl = document.getElementById('prevDocSubtitle');
+            if (prevDocTitleEl) prevDocTitleEl.innerText = billType;
+            if (prevDocSubEl) prevDocSubEl.innerText = billSubtitles[billType] || '';
+
             // Seller
             const sellerTaxLabel = getVal('sellerTaxType') || sellerProfile.sellerTaxType || 'GSTIN';
             document.getElementById('prevSellerTaxLabel').innerText = sellerTaxLabel;
@@ -2155,6 +2184,18 @@
             const sellerTaxLabel = getVal('sellerTaxType') || sellerProfile.sellerTaxType || 'GSTIN';
             const buyerTaxLabel = getVal('buyerTaxType') || buyerData.buyerTaxType || 'GSTIN';
 
+            const billType = getVal('billType') || 'TAX INVOICE';
+            const billSubtitles = {
+                'TAX INVOICE': '(Original for Recipient)',
+                'ESTIMATE': '(Estimate / Quotation)',
+                'PROFORMA INVOICE': '(Proforma Invoice)',
+                'QUOTATION': '(Commercial Quotation)',
+                'BILL OF SUPPLY': '(Composition / Exempt Supply)',
+                'DELIVERY CHALLAN': '(Delivery Challan)',
+                'CASH MEMO': '(Cash Receipt / Memo)'
+            };
+            const billSubtitle = billSubtitles[billType] || '';
+
             const invoiceDateFormatted = getVal('invoiceDate') ? formatDateReadable(getVal('invoiceDate')) : '';
             const orderDateFormatted = getVal('buyersOrderNoDated') ? formatDateReadable(getVal('buyersOrderNoDated')) : '';
             const dispatchDateFormatted = getVal('dispatchDocNoDated') ? formatDateReadable(getVal('dispatchDocNoDated')) : '';
@@ -2164,9 +2205,20 @@
                 pageMargins: [28, 28, 28, 28],
                 content: [
                     {
-                        text: 'TAX INVOICE',
-                        style: 'mainHeader',
-                        alignment: 'center'
+                        stack: [
+                            {
+                                text: billType,
+                                style: 'mainHeader',
+                                alignment: 'center'
+                            },
+                            billSubtitle ? {
+                                text: billSubtitle,
+                                fontSize: 8,
+                                color: '#64748b',
+                                alignment: 'center',
+                                margin: [0, -4, 0, 6]
+                            } : { text: '', margin: [0, 0, 0, 0] }
+                        ]
                     },
                     {
                         style: 'headerTableBlock',
@@ -2293,7 +2345,7 @@
                         }
                     },
                     {
-                        text: 'This is a computer generated tax invoice.',
+                        text: 'This is a computer generated ' + billType.toLowerCase() + '.',
                         alignment: 'center',
                         fontSize: 8,
                         color: '#94a3b8',
@@ -2324,9 +2376,10 @@
                 }
             };
 
+            const cleanType = billType.replace(/[^a-zA-Z0-9]/g, '_');
             const cleanBuyer = (getVal('buyerName') || 'Buyer').replace(/[^a-zA-Z0-9]/g, '_');
             const cleanInv = (getVal('invoiceNo') || 'INV').replace(/[^a-zA-Z0-9]/g, '_');
-            const fileName = `Bill_${cleanBuyer}_${cleanInv}.pdf`;
+            const fileName = `${cleanType}_${cleanBuyer}_${cleanInv}.pdf`;
 
             try {
                 if (action === 'print') {
@@ -2335,7 +2388,7 @@
                     pdfMake.createPdf(docDefinition).open();
                 } else {
                     pdfMake.createPdf(docDefinition).download(fileName);
-                    showToast('Tax Invoice PDF downloaded successfully!');
+                    showToast(`${billType} PDF downloaded successfully!`);
                 }
             } catch (err) {
                 console.error(err);
@@ -2371,6 +2424,7 @@
             };
 
             invoiceMeta = {
+                billType: 'TAX INVOICE',
                 invoiceNo: 'GST/2026/089',
                 invoiceDate: new Date().toISOString().split('T')[0],
                 deliveryNote: 'DN-8842',
@@ -2442,6 +2496,7 @@
             if (confirm('Reset entire invoice form?')) {
                 buyerData = { buyerName: '', buyerAddressLine1: '', buyerAddressLine2: '', buyerAddressLine3: '', buyerTaxType: 'GSTIN', buyerGSTIN: '' };
                 invoiceMeta = {
+                    billType: 'TAX INVOICE',
                     invoiceNo: 'GST/' + new Date().getFullYear() + '/001',
                     invoiceDate: new Date().toISOString().split('T')[0],
                     deliveryNote: '', modeTermsOfPayment: '', suppliersRef: '', otherRef: '',
