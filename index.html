@@ -1100,7 +1100,7 @@
                                 <div id="prevSellerAddr2">Near New Jaspark Society</div>
                                 <div id="prevSellerAddr3">Isanpur, Ahmedabad - 380008</div>
                                 <div id="prevSellerPhoneRow" style="display: none; font-size: 0.72rem; color: #334155; margin-top: 2px;">
-                                    <span>&#9742; <span id="prevSellerPhone" class="input-mono"></span></span>
+                                    <span>Phone: <span id="prevSellerPhone" class="input-mono"></span></span>
                                 </div>
                                 <div style="margin-top: 4px; font-weight: 700;"><span id="prevSellerTaxLabel">GSTIN</span>: <span id="prevSellerGSTIN" class="input-mono">24AKSPM8985A1ZO</span></div>
                             </div>
@@ -1138,7 +1138,7 @@
                                 <div id="prevBuyerAddr2">Ahmedabad</div>
                                 <div id="prevBuyerAddr3">380008</div>
                                 <div id="prevBuyerPhoneRow" style="display: none; font-size: 0.72rem; color: #334155; margin-top: 2px;">
-                                    <span>&#9742; <span id="prevBuyerPhone" class="input-mono"></span></span>
+                                    <span>Phone: <span id="prevBuyerPhone" class="input-mono"></span></span>
                                 </div>
                                 <div style="margin-top: 4px; font-weight: 700;"><span id="prevBuyerTaxLabel">GSTIN</span>: <span id="prevBuyerGSTIN" class="input-mono">ABCDEF</span></div>
                             </div>
@@ -2742,10 +2742,9 @@
                                             if (getVal('sellerAddressLine3')) sStack.push({ text: getVal('sellerAddressLine3'), fontSize: 9 });
                                             if (getVal('sellerPhone')) {
                                                 sStack.push({
-                                                    text: [
-                                                        { text: '\u260E ', fontSize: 8.5, color: '#475569' },
-                                                        { text: getVal('sellerPhone'), fontSize: 8.5, color: '#1e293b' }
-                                                    ],
+                                                    text: 'Phone: ' + getVal('sellerPhone'),
+                                                    fontSize: 8.5,
+                                                    color: '#1e293b',
                                                     margin: [0, 1, 0, 0]
                                                 });
                                             }
@@ -2780,10 +2779,9 @@
                                             if (getVal('buyerAddressLine3')) bStack.push({ text: getVal('buyerAddressLine3'), fontSize: 9 });
                                             if (getVal('buyerPhone')) {
                                                 bStack.push({
-                                                    text: [
-                                                        { text: '\u260E ', fontSize: 8.5, color: '#475569' },
-                                                        { text: getVal('buyerPhone'), fontSize: 8.5, color: '#1e293b' }
-                                                    ],
+                                                    text: 'Phone: ' + getVal('buyerPhone'),
+                                                    fontSize: 8.5,
+                                                    color: '#1e293b',
                                                     margin: [0, 1, 0, 0]
                                                 });
                                             }
@@ -2915,15 +2913,22 @@
 
             try {
                 const generatedInvNo = getVal('invoiceNo') || invoiceMeta.invoiceNo || 'INV-001';
+                const pdfDoc = pdfMake.createPdf(docDefinition);
 
                 if (action === 'print') {
-                    pdfMake.createPdf(docDefinition).print();
+                    pdfDoc.print();
                     showToast(`${billType} (#${generatedInvNo}) sent to print!`);
                 } else if (action === 'open') {
-                    pdfMake.createPdf(docDefinition).open();
+                    pdfDoc.getBlob((blob) => {
+                        const blobUrl = URL.createObjectURL(blob);
+                        const opened = window.open(blobUrl, '_blank');
+                        if (!opened) {
+                            pdfDoc.open();
+                        }
+                    });
                     showToast(`${billType} (#${generatedInvNo}) PDF opened!`);
                 } else {
-                    pdfMake.createPdf(docDefinition).download(fileName);
+                    pdfDoc.download(fileName);
                     showToast(`${billType} (#${generatedInvNo}) downloaded successfully!`);
                 }
 
