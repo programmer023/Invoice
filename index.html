@@ -644,16 +644,13 @@
                             <div>
                                 <h2 class="card-title">
                                     <i data-lucide="building" style="width: 18px; height: 18px;"></i>
-                                    Seller Details
+                                    Seller & Bank Details
                                 </h2>
-                                <p class="card-subtitle">These values automatically persist in session storage for your next bills.</p>
+                                <p class="card-subtitle">Your company and bank details for issuing bills & invoices.</p>
                             </div>
-                            <span class="badge-sync">
-                                <i data-lucide="hard-drive" style="width: 12px; height: 12px;"></i>
-                                Session Auto-Save
-                            </span>
                         </div>
 
+                        <!-- Seller Details Section -->
                         <div class="form-grid cols-2">
                             <div class="form-group full-width">
                                 <label class="form-label">Company / Seller Name <span class="required">*</span></label>
@@ -681,30 +678,19 @@
                                 </div>
                                 <input type="text" id="sellerGSTIN" class="input-control input-mono" placeholder="24AKSPM8985A1ZO" oninput="saveSellerField('sellerGSTIN', this.value); updateInvoicePreview();">
                             </div>
-                        </div>
-
-                        <div class="profile-actions">
-                            <button type="button" class="btn btn-secondary btn-sm" onclick="saveAsPermanentDefault()">
-                                <i data-lucide="bookmark-check" style="width: 14px; height: 14px;"></i>
-                                Set as Default Seller
-                            </button>
-                            <button type="button" class="btn btn-secondary btn-sm" onclick="clearSellerProfile()">
-                                <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
-                                Clear Seller Details
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Bank Details Card -->
-                    <div class="card">
-                        <div class="card-header">
-                            <div>
-                                <h2 class="card-title">
-                                    <i data-lucide="landmark" style="width: 18px; height: 18px;"></i>
-                                    Bank & Payment Details
-                                </h2>
-                                <p class="card-subtitle">Will appear at the bottom of the tax invoice for direct wire/NEFT.</p>
+                            <div class="form-group">
+                                <label class="form-label">Phone/Mobile</label>
+                                <input type="text" id="sellerPhone" class="input-control input-mono" placeholder="e.g. +91 98765 43210" oninput="saveSellerField('sellerPhone', this.value); updateInvoicePreview();">
                             </div>
+                        </div>
+
+                        <!-- Bank Details Sub-Section -->
+                        <div style="margin: 1.25rem 0 0.85rem 0; padding-top: 1rem; border-top: 1px solid var(--border);">
+                            <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--secondary); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.2rem;">
+                                <i data-lucide="landmark" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                                Bank & Payment Details
+                            </h3>
+                            <p style="font-size: 0.75rem; color: var(--text-muted);">Will appear at the bottom of the document for direct wire/NEFT.</p>
                         </div>
 
                         <div class="form-grid cols-3">
@@ -726,7 +712,7 @@
                             </div>
                         </div>
 
-                        <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end;">
+                        <div class="profile-actions" style="margin-top: 1.25rem; display: flex; justify-content: flex-end; align-items: center;">
                             <button class="btn btn-primary" onclick="switchTab('tab-buyer')">
                                 <span>Next: Buyer Details</span>
                                 <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
@@ -773,7 +759,11 @@
                                         <option value="PAN">PAN</option>
                                     </select>
                                 </div>
-                                <input type="text" id="buyerGSTIN" class="input-control input-mono" placeholder="24AAACB1234F1Z5" oninput="updateInvoicePreview();">
+                                <input type="text" id="buyerGSTIN" class="input-control input-mono" placeholder="24AAACB1234F1Z5" oninput="buyerData.buyerGSTIN = this.value; updateInvoicePreview();">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone/Mobile</label>
+                                <input type="text" id="buyerPhone" class="input-control input-mono" placeholder="e.g. +91 98765 43210" oninput="buyerData.buyerPhone = this.value; updateInvoicePreview();">
                             </div>
                         </div>
                     </div>
@@ -1109,6 +1099,9 @@
                                 <div id="prevSellerAddr1">B9, Ambika Tenament</div>
                                 <div id="prevSellerAddr2">Near New Jaspark Society</div>
                                 <div id="prevSellerAddr3">Isanpur, Ahmedabad - 380008</div>
+                                <div id="prevSellerPhoneRow" style="display: none; font-size: 0.72rem; color: #334155; margin-top: 2px;">
+                                    <span>&#9742; <span id="prevSellerPhone" class="input-mono"></span></span>
+                                </div>
                                 <div style="margin-top: 4px; font-weight: 700;"><span id="prevSellerTaxLabel">GSTIN</span>: <span id="prevSellerGSTIN" class="input-mono">24AKSPM8985A1ZO</span></div>
                             </div>
 
@@ -1144,6 +1137,9 @@
                                 <div id="prevBuyerAddr1">Narol</div>
                                 <div id="prevBuyerAddr2">Ahmedabad</div>
                                 <div id="prevBuyerAddr3">380008</div>
+                                <div id="prevBuyerPhoneRow" style="display: none; font-size: 0.72rem; color: #334155; margin-top: 2px;">
+                                    <span>&#9742; <span id="prevBuyerPhone" class="input-mono"></span></span>
+                                </div>
                                 <div style="margin-top: 4px; font-weight: 700;"><span id="prevBuyerTaxLabel">GSTIN</span>: <span id="prevBuyerGSTIN" class="input-mono">ABCDEF</span></div>
                             </div>
 
@@ -1226,8 +1222,8 @@
                                 <div>Bank: <span id="prevBankName">HDFC Bank</span></div>
                                 <div>A/c No: <span id="prevAccountNo" class="input-mono">50200012345678</span></div>
                                 <div>IFSC: <span id="prevIFSC" class="input-mono">HDFC0000123</span></div>
-                                <div style="margin-top: 0.35rem; font-size: 0.65rem; color: #64748b;">
-                                    <em>Declaration: We declare that this invoice shows actual price of goods described.</em>
+                                <div style="margin-top: 0.35rem; font-size: 0.65rem; color: #64748b; line-height: 1.25;">
+                                    <em id="prevDeclarationText">Declaration: We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.</em>
                                 </div>
                             </div>
 
@@ -1239,6 +1235,11 @@
                                     Authorized Signatory
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Computer Generated Notice -->
+                        <div id="prevNoticeText" style="text-align: center; font-size: 0.65rem; color: #94a3b8; margin-top: 0.4rem;">
+                            This is a computer generated tax invoice.
                         </div>
                     </div>
                 </div>
@@ -1267,6 +1268,7 @@
             sellerAddressLine3: 'Isanpur, Ahmedabad -380008,',
             sellerTaxType: 'GSTIN',
             sellerGSTIN: '24AKSPM8985A1ZO',
+            sellerPhone: '+91 98765 43210',
             bank: 'HDFC Bank Ltd',
             AccountNo: '50200012345678',
             IFSCCODE: 'HDFC0000123',
@@ -1279,7 +1281,8 @@
             buyerAddressLine2: 'Ahmedabad',
             buyerAddressLine3: '380008',
             buyerTaxType: 'GSTIN',
-            buyerGSTIN: '24ABCDE1234F1Z5'
+            buyerGSTIN: '24ABCDE1234F1Z5',
+            buyerPhone: ''
         };
 
         let invoiceMeta = {
@@ -1538,70 +1541,20 @@
         // PERSISTENCE ENGINE (SESSION & LOCAL STORAGE)
         // ==========================================
         function loadSellerFromSessionOrLocal() {
-            // First check sessionStorage (as requested by user)
-            const sessionData = sessionStorage.getItem(SELLER_STORAGE_KEY);
-            if (sessionData) {
+            const savedData = localStorage.getItem(SELLER_STORAGE_KEY) || sessionStorage.getItem(SELLER_STORAGE_KEY);
+            if (savedData) {
                 try {
-                    sellerProfile = Object.assign({}, sellerProfile, JSON.parse(sessionData));
-                    showToast('Loaded seller profile from session');
-                    return;
-                } catch(e) {}
-            }
-
-            // Fallback to localStorage default if exists
-            const localData = localStorage.getItem(SELLER_STORAGE_KEY);
-            if (localData) {
-                try {
-                    sellerProfile = Object.assign({}, sellerProfile, JSON.parse(localData));
-                    // sync into session storage
-                    sessionStorage.setItem(SELLER_STORAGE_KEY, JSON.stringify(sellerProfile));
+                    sellerProfile = Object.assign({}, sellerProfile, JSON.parse(savedData));
                 } catch(e) {}
             }
         }
 
         function saveSellerField(field, value) {
             sellerProfile[field] = value;
-            // Persist to session storage instantly
-            sessionStorage.setItem(SELLER_STORAGE_KEY, JSON.stringify(sellerProfile));
-
-            const badge = document.getElementById('sessionStatus');
-            if (badge) {
-                badge.classList.add('saving');
-                badge.innerHTML = `<i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i><span>Saving...</span>`;
-                lucide.createIcons();
-                setTimeout(() => {
-                    badge.classList.remove('saving');
-                    badge.innerHTML = `<i data-lucide="check-circle-2" style="width: 14px; height: 14px;"></i><span>Session Synced</span>`;
-                    lucide.createIcons();
-                }, 400);
-            }
-        }
-
-        function saveAsPermanentDefault() {
-            localStorage.setItem(SELLER_STORAGE_KEY, JSON.stringify(sellerProfile));
-            sessionStorage.setItem(SELLER_STORAGE_KEY, JSON.stringify(sellerProfile));
-            showToast('Saved as permanent default seller profile!');
-        }
-
-        function clearSellerProfile() {
-            if (confirm('Clear seller details from current session?')) {
-                sellerProfile = {
-                    sellerName: '',
-                    sellerAddressLine1: '',
-                    sellerAddressLine2: '',
-                    sellerAddressLine3: '',
-                    sellerTaxType: 'GSTIN',
-                    sellerGSTIN: '',
-                    bank: '',
-                    AccountNo: '',
-                    IFSCCODE: '',
-                    termsOfDelivery: ''
-                };
-                sessionStorage.removeItem(SELLER_STORAGE_KEY);
-                populateFormFields();
-                updateInvoicePreview();
-                showToast('Seller details reset');
-            }
+            try {
+                localStorage.setItem(SELLER_STORAGE_KEY, JSON.stringify(sellerProfile));
+                sessionStorage.setItem(SELLER_STORAGE_KEY, JSON.stringify(sellerProfile));
+            } catch(e) {}
         }
 
         // ==========================================
@@ -1653,6 +1606,7 @@
         }
 
         function switchItemFlavor(flavor) {
+            const previousFlavor = invoiceMeta.itemFlavor;
             invoiceMeta.itemFlavor = flavor || 'STANDARD';
             const isSqft = (invoiceMeta.itemFlavor === 'SQFT');
 
@@ -1668,23 +1622,13 @@
             if (qtyLabel) qtyLabel.innerHTML = isSqft ? 'Quantity (Pcs) <span class="required">*</span>' : 'Quantity <span class="required">*</span>';
             if (rateLabel) rateLabel.innerHTML = isSqft ? 'Rate (₹ / Sq.Ft.) <span class="required">*</span>' : 'Unit Rate (₹) <span class="required">*</span>';
 
-            // Recalculate existing items according to flavor
-            products.forEach(p => {
-                if (isSqft) {
-                    p.length = parseFloat(p.length) || 10;
-                    p.breadth = parseFloat(p.breadth) || 20;
-                    p.sqft = `${p.length}*${p.breadth}`;
-                    p.totalSqft = (p.quantity || 1) * p.length * p.breadth;
-                    p.rateQuantity = p.totalSqft * p.rate;
-                } else {
-                    p.rateQuantity = (p.quantity || 1) * p.rate;
-                }
-                const taxPer = p.taxType === 'N/A' ? 0 : (p.taxType === 'IGST' ? (p.igstPer || 0) : ((p.cgstPer || 0) + (p.sgstPer || 0)));
-                p.taxAmount = p.rateQuantity * (taxPer / 100);
-                p.total = p.rateQuantity + p.taxAmount;
-            });
+            // Clear already added line items if switching format
+            if (products.length > 0 && previousFlavor && previousFlavor !== invoiceMeta.itemFlavor) {
+                products = [];
+                showToast(`Switched to ${isSqft ? 'Sq.Ft.' : 'Standard'} format. Previous items cleared.`);
+            }
 
-            // Load and display flavor-specific product catalog tags
+            // Load and display format-specific product catalog tags
             loadProductsCatalog(invoiceMeta.itemFlavor);
 
             calculateNewProdPreview();
@@ -2162,6 +2106,16 @@
             if (prevDocTitleEl) prevDocTitleEl.innerText = billType;
             if (prevDocSubEl) prevDocSubEl.innerText = billSubtitles[billType] || '';
 
+            const prevDeclarationTextEl = document.getElementById('prevDeclarationText');
+            if (prevDeclarationTextEl) {
+                prevDeclarationTextEl.innerText = `Declaration: We declare that this ${billType.toLowerCase()} shows the actual price of the goods described and that all particulars are true and correct.`;
+            }
+
+            const prevNoticeTextEl = document.getElementById('prevNoticeText');
+            if (prevNoticeTextEl) {
+                prevNoticeTextEl.innerText = `This is a computer generated ${billType.toLowerCase()}.`;
+            }
+
             // Seller
             const sellerTaxLabel = getVal('sellerTaxType') || sellerProfile.sellerTaxType || 'GSTIN';
             document.getElementById('prevSellerTaxLabel').innerText = sellerTaxLabel;
@@ -2172,6 +2126,19 @@
             document.getElementById('prevSellerGSTIN').innerText = getVal('sellerGSTIN') || '-';
             document.getElementById('prevSignatoryCompany').innerText = getVal('sellerName') || 'SELLER';
 
+            // Seller Phone Preview
+            const sellerPhone = getVal('sellerPhone');
+            const prevSellerPhoneRow = document.getElementById('prevSellerPhoneRow');
+            const prevSellerPhone = document.getElementById('prevSellerPhone');
+            if (prevSellerPhoneRow && prevSellerPhone) {
+                if (sellerPhone) {
+                    prevSellerPhone.innerText = sellerPhone;
+                    prevSellerPhoneRow.style.display = 'block';
+                } else {
+                    prevSellerPhoneRow.style.display = 'none';
+                }
+            }
+
             // Buyer
             const buyerTaxLabel = getVal('buyerTaxType') || buyerData.buyerTaxType || 'GSTIN';
             document.getElementById('prevBuyerTaxLabel').innerText = buyerTaxLabel;
@@ -2180,6 +2147,19 @@
             document.getElementById('prevBuyerAddr2').innerText = getVal('buyerAddressLine2');
             document.getElementById('prevBuyerAddr3').innerText = getVal('buyerAddressLine3');
             document.getElementById('prevBuyerGSTIN').innerText = getVal('buyerGSTIN') || '-';
+
+            // Buyer Phone Preview
+            const buyerPhone = getVal('buyerPhone');
+            const prevBuyerPhoneRow = document.getElementById('prevBuyerPhoneRow');
+            const prevBuyerPhone = document.getElementById('prevBuyerPhone');
+            if (prevBuyerPhoneRow && prevBuyerPhone) {
+                if (buyerPhone) {
+                    prevBuyerPhone.innerText = buyerPhone;
+                    prevBuyerPhoneRow.style.display = 'block';
+                } else {
+                    prevBuyerPhoneRow.style.display = 'none';
+                }
+            }
 
             // Meta
             document.getElementById('prevInvoiceNo').innerText = getVal('invoiceNo') || 'INV-001';
@@ -2205,8 +2185,9 @@
             const prevBody = document.getElementById('prevTableBody');
             const prevHead = document.getElementById('prevTableHead');
             const isSqft = (invoiceMeta.itemFlavor === 'SQFT');
-            const isNoTax = (invoiceMeta.taxType === 'N/A');
-            const TARGET_MIN_ROWS = 8;
+            const activeTaxType = (document.getElementById('invoiceTaxType') && document.getElementById('invoiceTaxType').value) || invoiceMeta.taxType || 'GST';
+            const isNoTax = (activeTaxType === 'N/A');
+            const TARGET_MIN_ROWS = 10;
             let rowsHtml = '';
 
             if (prevHead) {
@@ -2438,7 +2419,8 @@
             const totals = updateTotals();
 
             const isSqft = (invoiceMeta.itemFlavor === 'SQFT');
-            const isNoTax = (invoiceMeta.taxType === 'N/A');
+            const activeTaxType = (document.getElementById('invoiceTaxType') && document.getElementById('invoiceTaxType').value) || invoiceMeta.taxType || 'GST';
+            const isNoTax = (activeTaxType === 'N/A');
 
             // Construct formatted table rows for pdfMake
             let pdfTableBody = [];
@@ -2549,8 +2531,8 @@
                 }
             });
 
-            // If line items are fewer than TARGET_MIN_ROWS (8), pad with empty rows to utilize full A4 page
-            const TARGET_PDF_ROWS = 8;
+            // If line items are fewer than TARGET_PDF_ROWS (10), pad with empty rows to utilize full A4 page
+            const TARGET_PDF_ROWS = 10;
             const emptyRowsNeeded = Math.max(0, TARGET_PDF_ROWS - products.length);
 
             for (let i = 0; i < emptyRowsNeeded; i++) {
@@ -2751,13 +2733,25 @@
                             body: [
                                 [
                                     {
-                                        stack: [
-                                            { text: getVal('sellerName') || 'SELLER NAME', bold: true, fontSize: 12, color: '#0f172a' },
-                                            { text: getVal('sellerAddressLine1'), fontSize: 9 },
-                                            { text: getVal('sellerAddressLine2'), fontSize: 9 },
-                                            { text: getVal('sellerAddressLine3'), fontSize: 9 },
-                                            { text: sellerTaxLabel + ': ' + (getVal('sellerGSTIN') || '-'), bold: true, fontSize: 9, margin: [0, 4, 0, 0] }
-                                        ],
+                                        stack: (() => {
+                                            const sStack = [
+                                                { text: getVal('sellerName') || 'SELLER NAME', bold: true, fontSize: 12, color: '#0f172a' }
+                                            ];
+                                            if (getVal('sellerAddressLine1')) sStack.push({ text: getVal('sellerAddressLine1'), fontSize: 9 });
+                                            if (getVal('sellerAddressLine2')) sStack.push({ text: getVal('sellerAddressLine2'), fontSize: 9 });
+                                            if (getVal('sellerAddressLine3')) sStack.push({ text: getVal('sellerAddressLine3'), fontSize: 9 });
+                                            if (getVal('sellerPhone')) {
+                                                sStack.push({
+                                                    text: [
+                                                        { text: '\u260E ', fontSize: 8.5, color: '#475569' },
+                                                        { text: getVal('sellerPhone'), fontSize: 8.5, color: '#1e293b' }
+                                                    ],
+                                                    margin: [0, 1, 0, 0]
+                                                });
+                                            }
+                                            sStack.push({ text: sellerTaxLabel + ': ' + (getVal('sellerGSTIN') || '-'), bold: true, fontSize: 9, margin: [0, 4, 0, 0] });
+                                            return sStack;
+                                        })(),
                                         margin: [4, 4, 4, 4]
                                     },
                                     {
@@ -2776,14 +2770,26 @@
                                 ],
                                 [
                                     {
-                                        stack: [
-                                            { text: 'Billed To (Buyer):', fontSize: 8, color: '#64748b', bold: true },
-                                            { text: getVal('buyerName') || 'BUYER NAME', bold: true, fontSize: 11, color: '#0f172a' },
-                                            { text: getVal('buyerAddressLine1'), fontSize: 9 },
-                                            { text: getVal('buyerAddressLine2'), fontSize: 9 },
-                                            { text: getVal('buyerAddressLine3'), fontSize: 9 },
-                                            { text: buyerTaxLabel + ': ' + (getVal('buyerGSTIN') || '-'), bold: true, fontSize: 9, margin: [0, 4, 0, 0] }
-                                        ],
+                                        stack: (() => {
+                                            const bStack = [
+                                                { text: 'Billed To (Buyer):', fontSize: 8, color: '#64748b', bold: true },
+                                                { text: getVal('buyerName') || 'BUYER NAME', bold: true, fontSize: 11, color: '#0f172a' }
+                                            ];
+                                            if (getVal('buyerAddressLine1')) bStack.push({ text: getVal('buyerAddressLine1'), fontSize: 9 });
+                                            if (getVal('buyerAddressLine2')) bStack.push({ text: getVal('buyerAddressLine2'), fontSize: 9 });
+                                            if (getVal('buyerAddressLine3')) bStack.push({ text: getVal('buyerAddressLine3'), fontSize: 9 });
+                                            if (getVal('buyerPhone')) {
+                                                bStack.push({
+                                                    text: [
+                                                        { text: '\u260E ', fontSize: 8.5, color: '#475569' },
+                                                        { text: getVal('buyerPhone'), fontSize: 8.5, color: '#1e293b' }
+                                                    ],
+                                                    margin: [0, 1, 0, 0]
+                                                });
+                                            }
+                                            bStack.push({ text: buyerTaxLabel + ': ' + (getVal('buyerGSTIN') || '-'), bold: true, fontSize: 9, margin: [0, 4, 0, 0] });
+                                            return bStack;
+                                        })(),
                                         margin: [4, 4, 4, 4]
                                     },
                                     {
@@ -2848,7 +2854,7 @@
                                             { text: 'A/c No.     : ' + (getVal('AccountNo') || '-'), fontSize: 8.5, bold: true },
                                             { text: 'IFSC Code : ' + (getVal('IFSCCODE') || '-'), fontSize: 8.5, bold: true },
                                             { text: 'Terms: ' + (getVal('termsOfDelivery') || '-'), fontSize: 8, margin: [0, 4, 0, 0] },
-                                            { text: '\nDeclaration:\nWe declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.', fontSize: 7.5, color: '#64748b' }
+                                            { text: '\nDeclaration:\nWe declare that this ' + billType.toLowerCase() + ' shows the actual price of the goods described and that all particulars are true and correct.', fontSize: 7.5, color: '#64748b' }
                                         ],
                                         margin: [4, 4, 4, 4]
                                     },
